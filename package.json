@@ -1,0 +1,13 @@
+{
+  "name": "mo-gallery-plugin-marketplace",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "node scripts/validate-index.mjs",
+    "check:assets": "node scripts/validate-index.mjs --check-assets"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
