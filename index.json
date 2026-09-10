@@ -1,56 +1,62 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-09-08T00:00:00Z",
+  "updatedAt": "2026-09-10T08:15:00Z",
   "plugins": [
-    {
-      "id": "github",
-      "name": "GitHub",
-      "description": "Upload objects to a GitHub repository using the Contents API.",
-      "author": "MO Gallery",
-      "version": "0.1.0",
-      "coreApiVersion": "1",
-      "contributions": [
-        {
-          "domain": "storage",
-          "apiVersion": "1",
-          "capabilities": [
-            "source.validate",
-            "plugin.health",
-            "object.put",
-            "object.delete",
-            "object.getUrl",
-            "checksum"
-          ]
-        }
-      ],
-      "homepage": "https://github.com/ushaio/mo-gallery-plugin-github",
-      "repository": "https://github.com/ushaio/mo-gallery-plugin-github",
-      "platforms": {}
-    },
     {
       "id": "s3-compatible",
       "name": "S3-compatible / R2",
       "description": "Upload objects to AWS S3-compatible services such as Cloudflare R2.",
       "author": "MO Gallery",
-      "version": "0.1.0",
+      "version": "0.1.2",
       "coreApiVersion": "1",
       "contributions": [
         {
           "domain": "storage",
           "apiVersion": "1",
           "capabilities": [
-            "source.validate",
             "plugin.health",
+            "source.validate",
             "object.put",
+            "object.get",
+            "object.stat",
+            "object.list",
+            "object.move",
             "object.delete",
             "object.getUrl",
-            "checksum"
+            "checksum",
+            "idempotency"
           ]
         }
       ],
-      "homepage": "https://github.com/ushaio/mo-gallery-plugin-s3",
-      "repository": "https://github.com/ushaio/mo-gallery-plugin-s3",
-      "platforms": {}
+      "homepage": "https://github.com/ushaio/mo-gallery-plugin/tree/master/plugins/s3",
+      "repository": "https://github.com/ushaio/mo-gallery-plugin/tree/master/plugins/s3",
+      "platforms": {
+        "windows-amd64": {
+          "url": "https://github.com/ushaio/mo-gallery-plugin/releases/download/s3-compatible-v0.1.2/s3-compatible-0.1.2.zip",
+          "sha256": "10b3b21cc50826a66705bc0707beef47a08df49bac17c7cb99c868ed2878e6f8",
+          "size": 255597
+        },
+        "darwin-amd64": {
+          "url": "https://github.com/ushaio/mo-gallery-plugin/releases/download/s3-compatible-v0.1.2/s3-compatible-0.1.2.zip",
+          "sha256": "10b3b21cc50826a66705bc0707beef47a08df49bac17c7cb99c868ed2878e6f8",
+          "size": 255597
+        },
+        "darwin-arm64": {
+          "url": "https://github.com/ushaio/mo-gallery-plugin/releases/download/s3-compatible-v0.1.2/s3-compatible-0.1.2.zip",
+          "sha256": "10b3b21cc50826a66705bc0707beef47a08df49bac17c7cb99c868ed2878e6f8",
+          "size": 255597
+        },
+        "linux-amd64": {
+          "url": "https://github.com/ushaio/mo-gallery-plugin/releases/download/s3-compatible-v0.1.2/s3-compatible-0.1.2.zip",
+          "sha256": "10b3b21cc50826a66705bc0707beef47a08df49bac17c7cb99c868ed2878e6f8",
+          "size": 255597
+        },
+        "linux-arm64": {
+          "url": "https://github.com/ushaio/mo-gallery-plugin/releases/download/s3-compatible-v0.1.2/s3-compatible-0.1.2.zip",
+          "sha256": "10b3b21cc50826a66705bc0707beef47a08df49bac17c7cb99c868ed2878e6f8",
+          "size": 255597
+        }
+      }
     },
     {
       "id": "webdav",
@@ -78,9 +84,35 @@
           ]
         }
       ],
-      "homepage": "https://github.com/ushaio/mo-gallery-plugin-webdav",
-      "repository": "https://github.com/ushaio/mo-gallery-plugin-webdav",
-      "platforms": {}
+      "homepage": "https://github.com/ushaio/mo-gallery-plugin/tree/master/plugins/webdav",
+      "repository": "https://github.com/ushaio/mo-gallery-plugin/tree/master/plugins/webdav",
+      "platforms": {
+        "windows-amd64": {
+          "url": "https://github.com/ushaio/mo-gallery-plugin/releases/download/webdav-v0.1.0/webdav-0.1.0.zip",
+          "sha256": "33baf5700b57a74562ccea3da0c15f710fabbc4c8edce89adcb3041d7b15ff4f",
+          "size": 12369
+        },
+        "darwin-amd64": {
+          "url": "https://github.com/ushaio/mo-gallery-plugin/releases/download/webdav-v0.1.0/webdav-0.1.0.zip",
+          "sha256": "33baf5700b57a74562ccea3da0c15f710fabbc4c8edce89adcb3041d7b15ff4f",
+          "size": 12369
+        },
+        "darwin-arm64": {
+          "url": "https://github.com/ushaio/mo-gallery-plugin/releases/download/webdav-v0.1.0/webdav-0.1.0.zip",
+          "sha256": "33baf5700b57a74562ccea3da0c15f710fabbc4c8edce89adcb3041d7b15ff4f",
+          "size": 12369
+        },
+        "linux-amd64": {
+          "url": "https://github.com/ushaio/mo-gallery-plugin/releases/download/webdav-v0.1.0/webdav-0.1.0.zip",
+          "sha256": "33baf5700b57a74562ccea3da0c15f710fabbc4c8edce89adcb3041d7b15ff4f",
+          "size": 12369
+        },
+        "linux-arm64": {
+          "url": "https://github.com/ushaio/mo-gallery-plugin/releases/download/webdav-v0.1.0/webdav-0.1.0.zip",
+          "sha256": "33baf5700b57a74562ccea3da0c15f710fabbc4c8edce89adcb3041d7b15ff4f",
+          "size": 12369
+        }
+      }
     }
   ]
 }
