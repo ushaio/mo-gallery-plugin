@@ -1,5 +1,86 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-08-17T00:00:00Z",
-  "plugins": []
+  "updatedAt": "2026-09-08T00:00:00Z",
+  "plugins": [
+    {
+      "id": "github",
+      "name": "GitHub",
+      "description": "Upload objects to a GitHub repository using the Contents API.",
+      "author": "MO Gallery",
+      "version": "0.1.0",
+      "coreApiVersion": "1",
+      "contributions": [
+        {
+          "domain": "storage",
+          "apiVersion": "1",
+          "capabilities": [
+            "source.validate",
+            "plugin.health",
+            "object.put",
+            "object.delete",
+            "object.getUrl",
+            "checksum"
+          ]
+        }
+      ],
+      "homepage": "https://github.com/ushaio/mo-gallery-plugin-github",
+      "repository": "https://github.com/ushaio/mo-gallery-plugin-github",
+      "platforms": {}
+    },
+    {
+      "id": "s3-compatible",
+      "name": "S3-compatible / R2",
+      "description": "Upload objects to AWS S3-compatible services such as Cloudflare R2.",
+      "author": "MO Gallery",
+      "version": "0.1.0",
+      "coreApiVersion": "1",
+      "contributions": [
+        {
+          "domain": "storage",
+          "apiVersion": "1",
+          "capabilities": [
+            "source.validate",
+            "plugin.health",
+            "object.put",
+            "object.delete",
+            "object.getUrl",
+            "checksum"
+          ]
+        }
+      ],
+      "homepage": "https://github.com/ushaio/mo-gallery-plugin-s3",
+      "repository": "https://github.com/ushaio/mo-gallery-plugin-s3",
+      "platforms": {}
+    },
+    {
+      "id": "webdav",
+      "name": "WebDAV (飞牛云 / 通用)",
+      "description": "Upload photos to any WebDAV server: fnOS (飞牛云), Nextcloud, 坚果云, Synology, Alist and more.",
+      "author": "MO Gallery",
+      "version": "0.1.0",
+      "coreApiVersion": "1",
+      "contributions": [
+        {
+          "domain": "storage",
+          "apiVersion": "1",
+          "capabilities": [
+            "source.validate",
+            "plugin.health",
+            "object.put",
+            "object.get",
+            "object.stat",
+            "object.list",
+            "object.move",
+            "object.delete",
+            "object.getUrl",
+            "checksum",
+            "idempotency"
+          ]
+        }
+      ],
+      "homepage": "https://github.com/ushaio/mo-gallery-plugin-webdav",
+      "repository": "https://github.com/ushaio/mo-gallery-plugin-webdav",
+      "platforms": {}
+    }
+  ]
 }
