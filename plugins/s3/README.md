@@ -1,7 +1,8 @@
 # MO Gallery Desktop S3 Plugin
 
-This is an external Desktop plugin. It is intentionally outside the main
-`mo-gallery-web` workspace and must be built and imported manually.
+This is an official Desktop storage plugin (S3-compatible services and
+Cloudflare R2), maintained in the `plugins/` directory of the
+`mo-gallery-plugin` marketplace repository.
 
 ```bash
 pnpm install
@@ -10,5 +11,7 @@ pnpm build
 
 The generated package must pass the Desktop host's manifest, checksum, and
 signature checks before it can be used in a production build. The local SDK
-reference points at `../mo-gallery-web/packages/desktop-plugin-sdk` for the
-current development layout.
+reference points at `../../../emulsion-desktop/packages/desktop-plugin-sdk`
+and requires the mo-gallery multi-repository workspace layout.
+
+Release flow: see the repository's [CONTRIBUTING.md](../../CONTRIBUTING.md).

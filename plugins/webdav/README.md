@@ -12,7 +12,9 @@ MO Gallery Desktop 的通用 WebDAV 存储源插件。任何标准 WebDAV 服务
 
 ## 构建
 
-本仓库刻意位于 mo-gallery-web workspace 之外（与 mo-gallery-plugin-s3 一致）：
+本插件位于 `mo-gallery-plugin` 市场仓库的 `plugins/webdav`（官方插件目录，SDK 以
+`file:../../../emulsion-desktop/packages/desktop-plugin-sdk` 相对引用，需要
+mo-gallery 多仓库工作区布局）：
 
 ```bash
 pnpm install
@@ -64,6 +66,7 @@ fnOS 需先在「文件管理 → WebDAV」中启用服务并允许该账号访�
 
 ## 发布
 
-上架市场需要：`desktop/build/package-desktop-plugin.mjs` 用发布 Ed25519 私钥生成
+上架市场需要：`emulsion-desktop/build/package-desktop-plugin.mjs` 用发布 Ed25519 私钥生成
 签名 ZIP → 上传 `ushaio/mo-gallery-plugin` Release → 更新 `index.json`。详见
-[PLUGIN.md](./PLUGIN.md) 与 mo-gallery-web 仓库 `docs/plugin-system/marketplace-repository.md`。
+[PLUGIN.md](./PLUGIN.md) 与本仓库 [CONTRIBUTING.md](../../CONTRIBUTING.md)、
+[市场仓库契约](https://github.com/ushaio/mo-gallery-web/blob/master/docs/plugin-system/marketplace-repository.md)。
