@@ -3,12 +3,13 @@
 ## Purpose
 
 This repository is the official MO Gallery Desktop plugin marketplace source.
-It stores `index.json`, validation tooling, and GitHub Release assets. Plugin
-source code belongs in each plugin's own repository.
+It stores `index.json`, validation tooling, GitHub Release assets, and the
+official plugin sources under `plugins/`. Third-party plugin source code
+belongs in each plugin's own repository.
 
 ## Authoritative Contract
 
-- Keep Schema 1 compatible with `mo-gallery-web/desktop/storage_plugins/marketplace.go`.
+- Keep Schema 1 compatible with `emulsion-desktop/storage_plugins/marketplace.go`.
 - The host implementation is authoritative when documentation and code differ.
 - Only list signed, immutable packages already uploaded to this repository's Releases.
 - Do not list planned, locally built, or unsigned plugins.

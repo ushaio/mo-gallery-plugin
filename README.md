@@ -7,17 +7,14 @@ MO Gallery Desktop 的官方插件市场索引。Desktop 从以下固定地址�
 https://raw.githubusercontent.com/ushaio/mo-gallery-plugin/master/index.json
 ```
 
-这个仓库只保存市场元数据和 GitHub Release 资产，不保存插件源码。插件源码在各自
-仓库维护；市场中的安装包仍须通过 Desktop 的 manifest、checksum、Ed25519 签名、
-运行时和兼容性校验。
+这个仓库保存市场元数据、GitHub Release 资产，以及 `plugins/` 目录下的官方插件源码
+（s3-compatible、webdav）。第三方插件源码在各自仓库维护；市场中的安装包仍须通过
+Desktop 的 manifest、checksum、Ed25519 签名、运行时和兼容性校验。
 
 ## 当前状态
 
-索引使用 Schema 1。仓库初始化时保持空索引；插件只有在签名安装包已经发布并完成
-校验后才能加入。当前候选插件包括：
-
-- `s3-compatible`：源码位于 `mo-gallery-plugin-s3`，尚未发布到市场。
-- GitHub storage plugin：源码仓库尚未完成 SDK 化实现，不应加入索引。
+索引使用 Schema 1。只有签名安装包已经发布并完成校验的插件才会加入索引。官方插件
+源码位于本仓库 `plugins/` 目录，开发流程见 [CONTRIBUTING.md](CONTRIBUTING.md)。
 
 ## 本地校验
 
@@ -35,7 +32,7 @@ npm run check:assets
 
 索引契约见 [schema/index.schema.json](schema/index.schema.json)，完整收录流程见
 [CONTRIBUTING.md](CONTRIBUTING.md)。宿主的权威解析实现位于
-`mo-gallery-web/desktop/storage_plugins/marketplace.go`。
+`emulsion-desktop/storage_plugins/marketplace.go`。
 
 ## 安全边界
 

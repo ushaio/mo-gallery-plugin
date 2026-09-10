@@ -13,8 +13,10 @@
 
 ## 发布流程
 
-1. 在插件源码仓库运行构建、类型检查和 contract tests。
-2. 使用 MO Gallery 的 `desktop/build/package-desktop-plugin.mjs` 生成签名 ZIP。
+官方插件源码位于本仓库 `plugins/` 目录；第三方插件在各自仓库。
+
+1. 在插件目录运行构建、类型检查和 contract tests（官方插件：`cd plugins/<name> && pnpm install && pnpm build && pnpm test`）。
+2. 使用 `emulsion-desktop/build/package-desktop-plugin.mjs` 生成签名 ZIP。
 3. 创建中央仓库 Release，并使用不可变的版本化文件名上传各平台资产。
 4. 计算 Release 资产的实际字节数和 SHA-256。
 5. 在 `index.json` 中新增或更新插件条目，并更新 UTC `updatedAt`。
