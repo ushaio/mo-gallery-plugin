@@ -202,6 +202,8 @@ function createClient(config: S3Config, credentials: CredentialValues, requestTi
       requestTimeout: requestTimeoutMs,
       socketTimeout: requestTimeoutMs,
     }),
+    // Host transfers are flowing streams, which cannot be hashed after reading starts.
+    requestChecksumCalculation: 'WHEN_REQUIRED',
     maxAttempts: 1,
   }
   return new S3Client(clientConfig)
