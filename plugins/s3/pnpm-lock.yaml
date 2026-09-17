@@ -11,9 +11,9 @@ importers:
       '@aws-sdk/client-s3':
         specifier: 3.1109.0
         version: 3.1109.0
-      '@mo-gallery/desktop-plugin-sdk':
-        specifier: file:../../../emulsion-desktop/packages/desktop-plugin-sdk
-        version: file:../../../emulsion-desktop/packages/desktop-plugin-sdk
+      '@mo-gallery/plugin-sdk':
+        specifier: file:../../../emulsion-desktop/packages/plugin-sdk
+        version: file:../../../emulsion-desktop/packages/plugin-sdk
       '@smithy/node-http-handler':
         specifier: 4.11.2
         version: 4.11.2
@@ -261,8 +261,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@mo-gallery/desktop-plugin-sdk@file:../../../emulsion-desktop/packages/desktop-plugin-sdk':
-    resolution: {directory: ../../../emulsion-desktop/packages/desktop-plugin-sdk, type: directory}
+  '@mo-gallery/plugin-sdk@file:../../../emulsion-desktop/packages/plugin-sdk':
+    resolution: {directory: ../../../emulsion-desktop/packages/plugin-sdk, type: directory}
     engines: {node: '>=20'}
 
   '@smithy/core@3.33.2':
@@ -572,7 +572,7 @@ snapshots:
   '@esbuild/win32-x64@0.27.2':
     optional: true
 
-  '@mo-gallery/desktop-plugin-sdk@file:../../../emulsion-desktop/packages/desktop-plugin-sdk': {}
+  '@mo-gallery/plugin-sdk@file:../../../emulsion-desktop/packages/plugin-sdk': {}
 
   '@smithy/core@3.33.2':
     dependencies:

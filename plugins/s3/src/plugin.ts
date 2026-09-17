@@ -28,7 +28,7 @@ import {
   type StoragePlugin,
   type UrlRequest,
   type ValidateRequest,
-} from '@mo-gallery/desktop-plugin-sdk'
+} from '@mo-gallery/plugin-sdk'
 import { manifest } from './manifest.js'
 
 interface S3Config {

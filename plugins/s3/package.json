@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.1109.0",
-    "@mo-gallery/desktop-plugin-sdk": "file:../../../emulsion-desktop/packages/desktop-plugin-sdk",
+    "@mo-gallery/plugin-sdk": "file:../../../emulsion-desktop/packages/plugin-sdk",
     "@smithy/node-http-handler": "4.11.2"
   },
   "devDependencies": {

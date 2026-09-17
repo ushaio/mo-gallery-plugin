@@ -5,7 +5,7 @@ on Windows x64, macOS x64/arm64, and Linux x64/arm64 when Desktop supplies its
 bundled Node 22 runtime.
 
 The plugin is a hand-written WebDAV client on `node:http`/`node:https` with zero
-runtime dependencies beyond `@mo-gallery/desktop-plugin-sdk`. It supports a
+runtime dependencies beyond `@mo-gallery/plugin-sdk`. It supports a
 WebDAV root URL, optional base path, public URL prefixes, Basic Authentication,
 streaming upload and download, PROPFIND-based listing with client-side cursor
 pagination, server-side MOVE, delete, stat, ETag checksums, idempotent PUT

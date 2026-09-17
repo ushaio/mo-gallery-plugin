@@ -1,4 +1,4 @@
-import { createStoragePlugin } from '@mo-gallery/desktop-plugin-sdk'
+import { createStoragePlugin } from '@mo-gallery/plugin-sdk'
 import { createGitHubPlugin } from './plugin.js'
 
 createStoragePlugin(createGitHubPlugin()).start()

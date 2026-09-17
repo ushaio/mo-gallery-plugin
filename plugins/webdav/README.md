@@ -13,7 +13,7 @@ MO Gallery Desktop 的通用 WebDAV 存储源插件。任何标准 WebDAV 服务
 ## 构建
 
 本插件位于 `mo-gallery-plugin` 市场仓库的 `plugins/webdav`（官方插件目录，SDK 以
-`file:../../../emulsion-desktop/packages/desktop-plugin-sdk` 相对引用，需要
+`file:../../../emulsion-desktop/packages/plugin-sdk` 相对引用，需要
 mo-gallery 多仓库工作区布局）：
 
 ```bash
@@ -22,7 +22,7 @@ pnpm build    # tsc 类型检查 + esbuild 产出 dist/main.js（自包含 bundl
 pnpm test     # 契约测试：fake WebDAV 服务器 + SDK fake-host
 ```
 
-运行时零第三方依赖（仅 `@mo-gallery/desktop-plugin-sdk`），WebDAV 客户端基于
+运行时零第三方依赖（仅 `@mo-gallery/plugin-sdk`），WebDAV 客户端基于
 `node:http`/`node:https` 手写实现。
 
 ## 飞牛云（fnOS）配置示例

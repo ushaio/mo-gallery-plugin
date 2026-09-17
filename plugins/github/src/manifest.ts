@@ -1,4 +1,4 @@
-import type { PluginManifest } from '@mo-gallery/desktop-plugin-sdk'
+import type { PluginManifest } from '@mo-gallery/plugin-sdk'
 
 export const manifest: PluginManifest = {
   id: 'github',

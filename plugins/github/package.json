@@ -12,7 +12,7 @@
     "test": "tsc --noEmit -p tsconfig.test.json && node --import tsx tests/contract.test.ts"
   },
   "dependencies": {
-    "@mo-gallery/desktop-plugin-sdk": "file:../../../emulsion-desktop/packages/desktop-plugin-sdk"
+    "@mo-gallery/plugin-sdk": "file:../../../emulsion-desktop/packages/plugin-sdk"
   },
   "devDependencies": {
     "esbuild": "0.27.2",

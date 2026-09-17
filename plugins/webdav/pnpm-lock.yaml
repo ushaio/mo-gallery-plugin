@@ -8,9 +8,9 @@ importers:
 
   .:
     dependencies:
-      '@mo-gallery/desktop-plugin-sdk':
-        specifier: file:../../../emulsion-desktop/packages/desktop-plugin-sdk
-        version: file:../../../emulsion-desktop/packages/desktop-plugin-sdk
+      '@mo-gallery/plugin-sdk':
+        specifier: file:../../../emulsion-desktop/packages/plugin-sdk
+        version: file:../../../emulsion-desktop/packages/plugin-sdk
     devDependencies:
       '@types/node':
         specifier: 20.19.30
@@ -183,8 +183,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@mo-gallery/desktop-plugin-sdk@file:../../../emulsion-desktop/packages/desktop-plugin-sdk':
-    resolution: {directory: ../../../emulsion-desktop/packages/desktop-plugin-sdk, type: directory}
+  '@mo-gallery/plugin-sdk@file:../../../emulsion-desktop/packages/plugin-sdk':
+    resolution: {directory: ../../../emulsion-desktop/packages/plugin-sdk, type: directory}
     engines: {node: '>=20'}
 
   '@types/node@20.19.30':
@@ -299,7 +299,7 @@ snapshots:
   '@esbuild/win32-x64@0.27.2':
     optional: true
 
-  '@mo-gallery/desktop-plugin-sdk@file:../../../emulsion-desktop/packages/desktop-plugin-sdk': {}
+  '@mo-gallery/plugin-sdk@file:../../../emulsion-desktop/packages/plugin-sdk': {}
 
   '@types/node@20.19.30':
     dependencies:

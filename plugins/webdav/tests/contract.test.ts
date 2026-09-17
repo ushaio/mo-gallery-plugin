@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto'
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http'
 import { once } from 'node:events'
 import test from 'node:test'
-import { createFakeHost, createStoragePlugin } from '@mo-gallery/desktop-plugin-sdk'
+import { createFakeHost, createStoragePlugin } from '@mo-gallery/plugin-sdk'
 import { createWebdavPlugin } from '../src/plugin.js'
 
 interface StoredObject {

@@ -15,7 +15,7 @@ import {
   type StoragePlugin,
   type UrlRequest,
   type ValidateRequest,
-} from '@mo-gallery/desktop-plugin-sdk'
+} from '@mo-gallery/plugin-sdk'
 import { manifest } from './manifest.js'
 import { webdavPropfind, webdavRequest, WebdavHttpError, decodeHrefSafe, type WebdavResource } from './webdav.js'
 
