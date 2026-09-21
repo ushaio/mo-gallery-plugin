@@ -1,0 +1,11 @@
+{
+  "id": "image-similarity",
+  "version": "0.8.3",
+  "coreApiVersion": "1",
+  "name": "Image similarity",
+  "description": "Local image-only perceptual comparison. Review candidates manually; equal hashes do not prove duplicates.",
+  "runtime": { "type": "node", "version": "node22", "entry": "src/index.mjs" },
+  "platforms": ["windows-amd64", "darwin-amd64", "darwin-arm64", "linux-amd64", "linux-arm64"],
+  "contributions": [{ "domain": "library", "apiVersion": "1", "capabilities": ["library.getCommands", "library.run"] }],
+  "permissions": []
+}

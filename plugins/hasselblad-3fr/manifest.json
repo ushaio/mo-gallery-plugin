@@ -1,0 +1,12 @@
+{
+  "id": "hasselblad-3fr",
+  "version": "0.1.0",
+  "coreApiVersion": "1",
+  "name": "Hasselblad 3FR embedded preview",
+  "description": "Extracts contiguous embedded JPEG previews; not a RAW developer.",
+  "runtime": { "type": "node", "version": "node22", "entry": "dist/main.mjs" },
+  "platforms": ["windows-amd64", "darwin-amd64", "darwin-arm64", "linux-amd64", "linux-arm64"],
+  "contributions": [{ "domain": "image-preview", "apiVersion": "1", "capabilities": ["preview"] }],
+  "capabilities": ["image-preview"],
+  "permissions": []
+}

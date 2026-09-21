@@ -7,14 +7,23 @@ MO Gallery Desktop 的官方插件市场索引。Desktop 从以下固定地址�
 https://raw.githubusercontent.com/ushaio/mo-gallery-plugin/master/index.json
 ```
 
-这个仓库保存市场元数据、GitHub Release 资产，以及 `plugins/` 目录下的官方插件源码
-（s3-compatible、webdav）。第三方插件源码在各自仓库维护；市场中的安装包仍须通过
-Desktop 的 manifest、checksum、Ed25519 签名、运行时和兼容性校验。
+这个仓库保存市场元数据、GitHub Release 资产，以及 `plugins/` 目录下的官方插件源码。
+第三方插件源码在各自仓库维护；市场中的安装包仍须通过 Desktop 的 manifest、checksum、
+Ed25519 签名、运行时和兼容性校验。
 
 ## 当前状态
 
 索引使用 Schema 1。只有签名安装包已经发布并完成校验的插件才会加入索引。官方插件
 源码位于本仓库 `plugins/` 目录，开发流程见 [CONTRIBUTING.md](CONTRIBUTING.md)。
+
+### 图片预览扩展
+
+[Hasselblad 3FR](plugins/hasselblad-3fr/README.md) 使用同一套 JSON-RPC 插件系统的
+`image-preview@1` 能力，为资源库提供 3FR 内嵌 JPEG 预览；缩略图与详情预览由宿主接入。
+它不是完整 RAW 显影器，也不是需要手动启动的资源分析任务。
+
+该插件当前仅提供源码与开发构建，尚未加入市场索引。需要支持 `image-preview@1` 的
+新版 Desktop；开发安装和测试方式见插件 README。正式收录仍须先完成签名、发布与资产校验。
 
 ## 本地校验
 
