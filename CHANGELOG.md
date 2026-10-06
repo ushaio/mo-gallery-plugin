@@ -21,6 +21,8 @@
 1. `s3-compatible` v0.2.0：新增插件自带的 web 配置界面（`ui@1`，`ui/index.html` + `src/ui.ts`）。相比按 `configSchema` 生成的表单，界面能表达服务商预设（R2 / AWS / 其他 S3）、按条件显示的字段（`publicUrl` 只在 `urlMode=public` 时出现、签名有效期只在 `signed` 时出现），以及真正走插件进程的「测试连接」；版式与宿主自己的存储源表单对齐——字段区在 ≥640px 时两列、窗口收窄到最小宽度时回落单列，输入框统一 32px 高，端点与名称这类长字段横跨整行。界面在无 same-origin、CSP 封禁全部网络的沙箱 iframe 里运行，只能读写当前这一个数据源的配置；凭据只写不读，空凭据输入会被宿主丢弃，因此保存表单不会误清已存的密钥。
 1. `hasselblad-3fr` v0.1.0：收录市场索引（分栏「图片处理」+「格式扩展」，`category: ["image", "format"]`）。插件从经典 TIFF 包装的 `.3fr` 里提取**已有的连续 JPEG 预览范围**，贡献 `image-preview@1` 的 `preview` 能力、`permissions: []`，让资源库能为哈苏 3FR 生成缩略图与详情预览；它不是 RAW 显影器（不做去马赛克/传感器解码）。宿主侧需支持 `image-preview@1`。
 
+1. 市场索引的 `name` 与 `description` 支持国际化（`schema/index.schema.json` + `scripts/validate-index.mjs` + `index.json` + `CONTRIBUTING.md` + `README.md`）：字段既可以直接写一个字符串（各界面语言共用它，旧索引与第三方索引不受影响），也可以写成「界面语言代码 → 文案」的映射，由客户端按当前界面语言取用、取不到再退回另一种。映射必须同时给出 `zh` 与 `en` —— 只给一种时另一种语言的界面会直接显示外语，而作者在索引里看不出来，所以 `npm run check` 会挡住。现有四个插件的中文名称与介绍已补齐。
+
 ### fix
 
 1. `s3-compatible`：流式传输改为按需计算校验和（`requestChecksumCalculation=WHEN_REQUIRED`），修复部分 S3 兼容存储的流式上传失败（`5960537`）

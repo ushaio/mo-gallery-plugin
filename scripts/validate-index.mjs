@@ -33,6 +33,28 @@ function nonEmptyString(value, path) {
   if (typeof value !== 'string' || value.trim() === '') fail(`${path} must be a non-empty string`)
 }
 
+// name / description 这类「随界面语言变化的文案」：字符串与「语言代码 → 文案」两种写法都收。
+// 写成映射时中英都必须给——只给一种，另一种界面会直接显示外语，而作者在索引里看不出这个问题。
+function localizedText(value, path, required) {
+  if (value === undefined) {
+    if (required) fail(`${path} must be a non-empty string or a locale map`)
+    return
+  }
+  if (typeof value === 'string') {
+    nonEmptyString(value, path)
+    return
+  }
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+    fail(`${path} must be a non-empty string or a locale map`)
+  }
+  for (const [locale, text] of Object.entries(value)) {
+    if (!LOCALE_PATTERN.test(locale)) fail(`${path} has an invalid locale key ${locale}`)
+    nonEmptyString(text, `${path}.${locale}`)
+  }
+  nonEmptyString(value.zh, `${path}.zh`)
+  nonEmptyString(value.en, `${path}.en`)
+}
+
 function exactKeys(value, allowed, path) {
   for (const key of Object.keys(value)) {
     if (!allowed.has(key)) fail(`${path} contains unsupported field ${key}`)
@@ -127,7 +149,7 @@ function validatePlugin(plugin, index, ids, categoryIds) {
   if (typeof plugin.id !== 'string' || !ID_PATTERN.test(plugin.id)) fail(`${path}.id is invalid`)
   if (ids.has(plugin.id)) fail(`${path}.id duplicates ${plugin.id}`)
   ids.add(plugin.id)
-  nonEmptyString(plugin.name, `${path}.name`)
+  localizedText(plugin.name, `${path}.name`, true)
   if (typeof plugin.version !== 'string' || !VERSION_PATTERN.test(plugin.version)) fail(`${path}.version is invalid`)
   nonEmptyString(plugin.coreApiVersion, `${path}.coreApiVersion`)
   if (plugin.category !== undefined) {
@@ -145,9 +167,8 @@ function validatePlugin(plugin, index, ids, categoryIds) {
       if (!categoryIds.has(slug)) fail(`${label} references ${slug}, which categories.json does not declare`)
     })
   }
-  for (const field of ['description', 'author']) {
-    if (plugin[field] !== undefined && typeof plugin[field] !== 'string') fail(`${path}.${field} must be a string`)
-  }
+  localizedText(plugin.description, `${path}.description`, false)
+  if (plugin.author !== undefined && typeof plugin.author !== 'string') fail(`${path}.author must be a string`)
   for (const field of ['homepage', 'repository']) {
     if (plugin[field] !== undefined) {
       try { new URL(plugin[field]) } catch { fail(`${path}.${field} must be an absolute URL`) }

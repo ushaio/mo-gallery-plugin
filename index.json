@@ -1,11 +1,14 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-06T01:58:00Z",
+  "updatedAt": "2026-10-06T02:39:00Z",
   "plugins": [
     {
       "id": "s3-compatible",
-      "name": "S3-compatible / R2",
-      "description": "Upload objects to AWS S3-compatible services such as Cloudflare R2.",
+      "name": { "zh": "S3 兼容 / R2", "en": "S3-compatible / R2" },
+      "description": {
+        "zh": "通过 S3 兼容 API 接入对象存储，可用于 Cloudflare R2、MinIO、阿里云 OSS 等自建或托管服务。",
+        "en": "Upload objects to AWS S3-compatible services such as Cloudflare R2."
+      },
       "author": "MO Gallery",
       "version": "0.1.2",
       "coreApiVersion": "1",
@@ -61,8 +64,11 @@
     },
     {
       "id": "github",
-      "name": "GitHub 仓库",
-      "description": "Upload photos to a GitHub repository (Contents API). Supports GitHub.com and GitHub Enterprise.",
+      "name": { "zh": "GitHub 仓库", "en": "GitHub repository" },
+      "description": {
+        "zh": "把图库直接提交到 GitHub 仓库（Contents API），支持 GitHub.com 与 GitHub Enterprise。",
+        "en": "Upload photos to a GitHub repository (Contents API). Supports GitHub.com and GitHub Enterprise."
+      },
       "author": "MO Gallery",
       "version": "0.1.0",
       "coreApiVersion": "1",
@@ -118,8 +124,11 @@
     },
     {
       "id": "webdav",
-      "name": "WebDAV (飞牛云 / 通用)",
-      "description": "Upload photos to any WebDAV server: fnOS (飞牛云), Nextcloud, 坚果云, Synology, Alist and more.",
+      "name": { "zh": "WebDAV（飞牛云 / 通用）", "en": "WebDAV (fnOS / generic)" },
+      "description": {
+        "zh": "连接飞牛云（fnOS）、Nextcloud、坚果云、Synology、Alist 等 WebDAV 服务，把已有网盘目录当作图库远端。",
+        "en": "Upload photos to any WebDAV server: fnOS (飞牛云), Nextcloud, 坚果云, Synology, Alist and more."
+      },
       "author": "MO Gallery",
       "version": "0.1.0",
       "coreApiVersion": "1",
@@ -175,8 +184,11 @@
     },
     {
       "id": "hasselblad-3fr",
-      "name": "Hasselblad 3FR embedded preview",
-      "description": "Extract the JPEG preview already embedded in Hasselblad 3FR files; not a RAW developer.",
+      "name": { "zh": "哈苏 3FR 内嵌预览", "en": "Hasselblad 3FR embedded preview" },
+      "description": {
+        "zh": "提取哈苏 3FR 文件里已经嵌入的 JPEG 预览图，不做 RAW 显影。",
+        "en": "Extract the JPEG preview already embedded in Hasselblad 3FR files; not a RAW developer."
+      },
       "author": "MO Gallery",
       "version": "0.1.0",
       "coreApiVersion": "1",

@@ -20,6 +20,18 @@
       "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
       "maxLength": 32
     },
+    "localizedText": {
+      "description": "随界面语言变化的文案。两种写法都收：直接写一个字符串（每个界面语言都用它），或写「界面语言代码 → 文案」让同一份索引跟着界面语言切换——写成映射时中英都要给，只给一种会让另一种界面直接显示成外语。客户端按界面语言取，取不到再退回另一种。",
+      "oneOf": [
+        { "type": "string", "minLength": 1 },
+        {
+          "type": "object",
+          "minProperties": 1,
+          "propertyNames": { "pattern": "^[a-z]{2}(?:-[A-Za-z]{2,8})*$" },
+          "additionalProperties": { "type": "string", "minLength": 1 }
+        }
+      ]
+    },
     "contribution": {
       "type": "object",
       "additionalProperties": false,
@@ -53,8 +65,14 @@
       "required": ["id", "name", "version", "coreApiVersion", "platforms"],
       "properties": {
         "id": { "type": "string", "pattern": "^[A-Za-z0-9._-]+$" },
-        "name": { "type": "string", "minLength": 1 },
-        "description": { "type": "string" },
+        "name": {
+          "description": "插件显示名。写法见 localizedText，想跟着界面语言切换就写成「语言代码 → 名称」。",
+          "$ref": "#/$defs/localizedText"
+        },
+        "description": {
+          "description": "插件介绍，写法同 name。省略时市场页不显示介绍。",
+          "$ref": "#/$defs/localizedText"
+        },
         "author": { "type": "string" },
         "version": { "type": "string", "pattern": "^v?[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$" },
         "coreApiVersion": { "type": "string", "minLength": 1 },
