@@ -14,6 +14,12 @@
     }
   },
   "$defs": {
+    "categorySlug": {
+      "description": "分类栏标识。取值必须是 categories.json 里声明过的 id —— 加一栏请改那份文件，不要在这里加枚举：客户端的栏名与顺序都从 categories.json 读，本文件只约束写法。",
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "maxLength": 32
+    },
     "contribution": {
       "type": "object",
       "additionalProperties": false,
@@ -52,6 +58,18 @@
         "author": { "type": "string" },
         "version": { "type": "string", "pattern": "^v?[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$" },
         "coreApiVersion": { "type": "string", "minLength": 1 },
+        "category": {
+          "description": "Marketplace shelves this plugin belongs to, written as slugs declared in categories.json（客户端把该文件当作分类 API 拉取：栏名与顺序都在那里）。字符串与字符串数组都收，写多个表示同时挂在多栏下；省略时客户端按能力域兜底，兜不到就落进它的「其他」栏。",
+          "oneOf": [
+            { "$ref": "#/$defs/categorySlug" },
+            {
+              "type": "array",
+              "items": { "$ref": "#/$defs/categorySlug" },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          ]
+        },
         "contributions": {
           "type": "array",
           "items": { "$ref": "#/$defs/contribution" }

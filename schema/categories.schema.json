@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/ushaio/mo-gallery-plugin/master/schema/categories.schema.json",
+  "title": "MO Gallery Plugin Marketplace Categories",
+  "description": "客户端市场页左侧分类栏的词表与顺序。这份文件就是分类 API：加一栏只需要在这里加一个条目，客户端按数组顺序渲染，不需要改客户端代码。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "updatedAt", "categories"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "updatedAt": { "type": "string", "format": "date-time" },
+    "categories": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/category" }
+    }
+  },
+  "$defs": {
+    "categorySlug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "maxLength": 32
+    },
+    "category": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name"],
+      "properties": {
+        "id": {
+          "description": "索引里 plugins[].category 引用的稳定标识。全小写、中划线分隔，不随界面语言变化。",
+          "$ref": "#/$defs/categorySlug"
+        },
+        "name": {
+          "description": "界面语言代码 → 显示名。至少要有 zh 与 en，新增语言只需在这里加一个键，客户端按当前语言取，取不到就回落到 zh。",
+          "type": "object",
+          "additionalProperties": { "type": "string", "minLength": 1 },
+          "required": ["zh", "en"],
+          "propertyNames": { "pattern": "^[a-z]{2}(?:-[A-Za-z]{2,8})*$" }
+        },
+        "domains": {
+          "description": "可选：本栏负责的插件能力域。插件没有声明 category 时，客户端用它从 contributions[].domain 反推分栏；同一个域只能出现在一栏里。",
+          "type": "array",
+          "items": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+          "uniqueItems": true
+        }
+      }
+    }
+  }
+}

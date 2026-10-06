@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-10-06T01:56:00Z",
+  "categories": [
+    {
+      "id": "storage",
+      "name": { "zh": "存储与上传", "en": "Storage & upload" },
+      "domains": ["storage"]
+    },
+    {
+      "id": "image",
+      "name": { "zh": "图片处理", "en": "Image processing" },
+      "domains": ["image-preview"]
+    },
+    {
+      "id": "image-editing",
+      "name": { "zh": "图片编辑", "en": "Image editing" }
+    },
+    {
+      "id": "format",
+      "name": { "zh": "格式扩展", "en": "Format support" }
+    },
+    {
+      "id": "ai",
+      "name": { "zh": "AI 工具", "en": "AI tools" }
+    },
+    {
+      "id": "library",
+      "name": { "zh": "资源库与检索", "en": "Library & search" },
+      "domains": ["library"]
+    },
+    {
+      "id": "publishing",
+      "name": { "zh": "内容发布", "en": "Publishing" }
+    },
+    {
+      "id": "tooling",
+      "name": { "zh": "自动化与工具", "en": "Automation" }
+    },
+    {
+      "id": "productivity",
+      "name": { "zh": "生产效率", "en": "Productivity" }
+    },
+    {
+      "id": "other",
+      "name": { "zh": "其他", "en": "Other" }
+    }
+  ]
+}

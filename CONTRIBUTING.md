@@ -19,7 +19,8 @@
 2. 使用 `emulsion-desktop/build/package-desktop-plugin.mjs` 生成签名 ZIP。
 3. 创建中央仓库 Release，并使用不可变的版本化文件名上传各平台资产。
 4. 计算 Release 资产的实际字节数和 SHA-256。
-5. 在 `index.json` 中新增或更新插件条目，并更新 UTC `updatedAt`。
+5. 在 `index.json` 中新增或更新插件条目，并更新 UTC `updatedAt`；若本次要新增分类，同时在
+   `categories.json` 里加好条目并更新它的 UTC `updatedAt`。
 6. 运行 `npm run check:assets`，确认索引和远程资产完全一致。
 7. 提交 Pull Request；不要在同一个版本号下替换既有资产。
 
@@ -31,6 +32,13 @@ Node 插件由 Desktop 内置的 Node 22 运行时启动，同一纯 JavaScript 
 - 插件 ID 在整个市场中唯一，只能包含 ASCII 字母、数字、点、下划线和连字符。
 - 版本使用 `major.minor.patch`，可以带 `v` 前缀和预发布后缀。
 - `coreApiVersion` 当前为 `1`。
+- `category` 可选，决定插件在客户端市场页的分栏（左栏垂直列出各分类，插件归到对应分类下）：
+  取值是 `categories.json` 里声明过的分类 id；字符串与字符串数组都收，写多个表示同时挂在多栏下
+  （「全部」视图里它会在每一栏各列一次）。省略时客户端按插件的 `contributions[].domain` 反推，
+  映射写在 `categories.json` 的 `domains` 里，推不出来才落进「其他」栏。
+- **新增分类请改 `categories.json`，不要改客户端代码**：那份文件就是分类 API，客户端直接拉它渲染
+  左栏 —— 栏名（`name.zh` / `name.en`，可继续加语言键）与顺序（数组顺序）都由它决定。`npm run check`
+  会拒绝没声明过的取值、同一插件里的重复取值，以及被两栏同时认领的能力域。
 - 平台键仅限 `windows-amd64`、`darwin-amd64`、`darwin-arm64`、
   `linux-amd64`、`linux-arm64`。
 - `sha256` 使用 64 位小写十六进制，不带 `sha256:` 前缀。

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-06T01:36:01Z",
+  "updatedAt": "2026-10-06T01:58:00Z",
   "plugins": [
     {
       "id": "s3-compatible",
@@ -9,6 +9,7 @@
       "author": "MO Gallery",
       "version": "0.1.2",
       "coreApiVersion": "1",
+      "category": "storage",
       "contributions": [
         {
           "domain": "storage",
@@ -65,6 +66,7 @@
       "author": "MO Gallery",
       "version": "0.1.0",
       "coreApiVersion": "1",
+      "category": "storage",
       "contributions": [
         {
           "domain": "storage",
@@ -121,6 +123,7 @@
       "author": "MO Gallery",
       "version": "0.1.0",
       "coreApiVersion": "1",
+      "category": "storage",
       "contributions": [
         {
           "domain": "storage",
@@ -177,6 +180,10 @@
       "author": "MO Gallery",
       "version": "0.1.0",
       "coreApiVersion": "1",
+      "category": [
+        "image",
+        "format"
+      ],
       "contributions": [
         {
           "domain": "image-preview",
