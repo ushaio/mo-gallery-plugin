@@ -1,4 +1,4 @@
-// emulsion-desktop/packages/plugin-sdk/src/errors.ts
+// node_modules/.pnpm/@mo-gallery+plugin-sdk@file_154b06f11f4df763df80af071fde2bb6/node_modules/@mo-gallery/plugin-sdk/src/errors.ts
 var ERROR_CODES = {
   INVALID_MANIFEST: "invalid_manifest",
   UNSUPPORTED_PLATFORM: "unsupported_platform",
@@ -26,7 +26,7 @@ function toPluginError(error, fallbackCode = "plugin_error") {
   return new PluginError(fallbackCode, String(error));
 }
 
-// emulsion-desktop/packages/plugin-sdk/src/transport.ts
+// node_modules/.pnpm/@mo-gallery+plugin-sdk@file_154b06f11f4df763df80af071fde2bb6/node_modules/@mo-gallery/plugin-sdk/src/transport.ts
 import { createInterface } from "node:readline";
 var JsonRpcStdioTransport = class {
   input;
@@ -153,7 +153,7 @@ var JsonRpcStdioTransport = class {
   }
 };
 
-// mo-gallery-plugin/plugins/hasselblad-3fr/manifest.json
+// manifest.json
 var manifest_default = {
   id: "hasselblad-3fr",
   version: "0.1.0",
@@ -167,7 +167,7 @@ var manifest_default = {
   permissions: []
 };
 
-// mo-gallery-plugin/plugins/hasselblad-3fr/src/preview.mjs
+// src/preview.mjs
 var LIMITS = Object.freeze({
   chunk: 256 * 1024,
   preview: 32 * 1024 * 1024,
@@ -335,7 +335,7 @@ async function extractPreview(params, rawRead, options = {}) {
   return best;
 }
 
-// mo-gallery-plugin/plugins/hasselblad-3fr/src/protocol.mjs
+// src/protocol.mjs
 var formats = { formats: [{ extensions: [".3fr"], format: "3fr", mimeType: "image/x-hasselblad-3fr" }] };
 function registerPreview(transport, manifest) {
   let busy = false;
@@ -371,5 +371,5 @@ function registerPreview(transport, manifest) {
   return transport;
 }
 
-// mo-gallery-plugin/plugins/hasselblad-3fr/src/main.mjs
+// src/main.mjs
 registerPreview(new JsonRpcStdioTransport(process.stdin, process.stdout, { maxLineBytes: 512 * 1024 }), manifest_default);

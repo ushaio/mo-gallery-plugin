@@ -20,10 +20,10 @@ Ed25519 签名、运行时和兼容性校验。
 
 [Hasselblad 3FR](plugins/hasselblad-3fr/README.md) 使用同一套 JSON-RPC 插件系统的
 `image-preview@1` 能力，为资源库提供 3FR 内嵌 JPEG 预览；缩略图与详情预览由宿主接入。
-它不是完整 RAW 显影器，也不是需要手动启动的资源分析任务。
+它不是完整 RAW 显影器，也不是需要手动启动的资源分析任务。v0.1.0 已发布签名安装包并
+收录进市场索引（归到「图片处理」栏），需要支持 `image-preview@1` 的新版 Desktop。
 
-该插件当前仅提供源码与开发构建，尚未加入市场索引。需要支持 `image-preview@1` 的
-新版 Desktop；开发安装和测试方式见插件 README。正式收录仍须先完成签名、发布与资产校验。
+开发安装和测试方式见插件 README。
 
 ## 本地校验
 
@@ -41,7 +41,7 @@ npm run check:assets
 
 索引契约见 [schema/index.schema.json](schema/index.schema.json)，完整收录流程见
 [CONTRIBUTING.md](CONTRIBUTING.md)。宿主的权威解析实现位于
-`emulsion-desktop/storage_plugins/marketplace.go`。
+`emulsion-desktop-v3/storage_plugins/marketplace.go`。
 
 ## 安全边界
 

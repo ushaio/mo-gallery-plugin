@@ -8,6 +8,6 @@
     "build": "esbuild src/main.mjs --bundle --platform=node --format=esm --target=node22 --outfile=dist/main.mjs",
     "test": "node --test tests/*.test.mjs"
   },
-  "dependencies": { "@mo-gallery/plugin-sdk": "file:../../../emulsion-desktop/packages/plugin-sdk" },
+  "dependencies": { "@mo-gallery/plugin-sdk": "file:../../../emulsion-desktop-v3/packages/plugin-sdk" },
   "devDependencies": { "esbuild": "0.27.2" }
 }

@@ -17,8 +17,9 @@
 
 ### feat
 
-1. 暂无
+1. `hasselblad-3fr` v0.1.0：收录市场索引。插件从经典 TIFF 包装的 `.3fr` 里提取**已有的连续 JPEG 预览范围**，贡献 `image-preview@1` 的 `preview` 能力、`permissions: []`，让资源库能为哈苏 3FR 生成缩略图与详情预览；它不是 RAW 显影器（不做去马赛克/传感器解码）。宿主侧需支持 `image-preview@1`。
 
 ### fix
 
 1. `s3-compatible`：流式传输改为按需计算校验和（`requestChecksumCalculation=WHEN_REQUIRED`），修复部分 S3 兼容存储的流式上传失败（`5960537`）
+2. `hasselblad-3fr`：修正 SDK 依赖路径（`emulsion-desktop` → `emulsion-desktop-v3`）。该目录已归档到 `archive/`，原路径下没有可解析的 `@mo-gallery/plugin-sdk`，导致 `pnpm install` 装不上依赖、无法构建发布包

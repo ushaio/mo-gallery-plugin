@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-09-10T09:30:00Z",
+  "updatedAt": "2026-10-06T01:36:01Z",
   "plugins": [
     {
       "id": "s3-compatible",
@@ -167,6 +167,52 @@
           "url": "https://github.com/ushaio/mo-gallery-plugin/releases/download/webdav-v0.1.0/webdav-0.1.0.zip",
           "sha256": "33baf5700b57a74562ccea3da0c15f710fabbc4c8edce89adcb3041d7b15ff4f",
           "size": 12369
+        }
+      }
+    },
+    {
+      "id": "hasselblad-3fr",
+      "name": "Hasselblad 3FR embedded preview",
+      "description": "Extract the JPEG preview already embedded in Hasselblad 3FR files; not a RAW developer.",
+      "author": "MO Gallery",
+      "version": "0.1.0",
+      "coreApiVersion": "1",
+      "contributions": [
+        {
+          "domain": "image-preview",
+          "apiVersion": "1",
+          "capabilities": [
+            "preview"
+          ]
+        }
+      ],
+      "homepage": "https://github.com/ushaio/mo-gallery-plugin/tree/master/plugins/hasselblad-3fr",
+      "repository": "https://github.com/ushaio/mo-gallery-plugin/tree/master/plugins/hasselblad-3fr",
+      "platforms": {
+        "windows-amd64": {
+          "url": "https://github.com/ushaio/mo-gallery-plugin/releases/download/hasselblad-3fr-v0.1.0/hasselblad-3fr-0.1.0.zip",
+          "sha256": "665f951bdf6ad2875fe65272b2117ee5e0586db8064e11881f1b9f9b4bff3fa7",
+          "size": 6032
+        },
+        "darwin-amd64": {
+          "url": "https://github.com/ushaio/mo-gallery-plugin/releases/download/hasselblad-3fr-v0.1.0/hasselblad-3fr-0.1.0.zip",
+          "sha256": "665f951bdf6ad2875fe65272b2117ee5e0586db8064e11881f1b9f9b4bff3fa7",
+          "size": 6032
+        },
+        "darwin-arm64": {
+          "url": "https://github.com/ushaio/mo-gallery-plugin/releases/download/hasselblad-3fr-v0.1.0/hasselblad-3fr-0.1.0.zip",
+          "sha256": "665f951bdf6ad2875fe65272b2117ee5e0586db8064e11881f1b9f9b4bff3fa7",
+          "size": 6032
+        },
+        "linux-amd64": {
+          "url": "https://github.com/ushaio/mo-gallery-plugin/releases/download/hasselblad-3fr-v0.1.0/hasselblad-3fr-0.1.0.zip",
+          "sha256": "665f951bdf6ad2875fe65272b2117ee5e0586db8064e11881f1b9f9b4bff3fa7",
+          "size": 6032
+        },
+        "linux-arm64": {
+          "url": "https://github.com/ushaio/mo-gallery-plugin/releases/download/hasselblad-3fr-v0.1.0/hasselblad-3fr-0.1.0.zip",
+          "sha256": "665f951bdf6ad2875fe65272b2117ee5e0586db8064e11881f1b9f9b4bff3fa7",
+          "size": 6032
         }
       }
     }
