@@ -28,3 +28,4 @@
 1. `s3-compatible`：流式传输改为按需计算校验和（`requestChecksumCalculation=WHEN_REQUIRED`），修复部分 S3 兼容存储的流式上传失败（`5960537`）
 2. `s3-compatible`：修正 SDK 依赖路径（`emulsion-desktop` → `emulsion-desktop-v3`），此前指向工作区里的空目录，`pnpm install` 后无法解析 `@mo-gallery/plugin-sdk`
 3. `hasselblad-3fr`：修正 SDK 依赖路径（`emulsion-desktop` → `emulsion-desktop-v3`）。该目录已归档到 `archive/`，原路径下没有可解析的 `@mo-gallery/plugin-sdk`，导致 `pnpm install` 装不上依赖、无法构建发布包
+4. 市场索引：三个插件的显示名改短——`s3-compatible` 由「S3 兼容 / R2」改为「S3 存储桶」（`S3 bucket`）、`webdav` 由「WebDAV（飞牛云 / 通用）」改为「WebDAV」、`hasselblad-3fr` 由「哈苏 3FR 内嵌预览」改为「3FR 格式」（`3FR format`）；同时去掉 `webdav` 介绍里的飞牛云（fnOS）表述、把 `s3-compatible` 的英文介绍补齐到与中文同义。只改索引里的展示文案与 `updatedAt`，不动插件版本与已发布的签名包
