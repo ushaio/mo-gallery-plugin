@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-08T00:49:54Z",
+  "updatedAt": "2026-10-08T01:15:42Z",
   "plugins": [
     {
       "id": "s3-compatible",
@@ -12,6 +12,7 @@
       "author": "MO Gallery",
       "version": "0.1.2",
       "coreApiVersion": "1",
+      "minDesktopVersion": "0.8.6",
       "category": "storage",
       "contributions": [
         {
@@ -72,6 +73,7 @@
       "author": "MO Gallery",
       "version": "0.1.0",
       "coreApiVersion": "1",
+      "minDesktopVersion": "0.8.6",
       "category": "storage",
       "contributions": [
         {
@@ -132,6 +134,7 @@
       "author": "MO Gallery",
       "version": "0.1.0",
       "coreApiVersion": "1",
+      "minDesktopVersion": "0.8.6",
       "category": "storage",
       "contributions": [
         {
@@ -192,6 +195,7 @@
       "author": "MO Gallery",
       "version": "0.1.0",
       "coreApiVersion": "1",
+      "minDesktopVersion": "0.8.6",
       "category": [
         "image",
         "format"
