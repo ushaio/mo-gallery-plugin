@@ -25,7 +25,37 @@ Ed25519 签名、运行时和兼容性校验。
 它不是完整 RAW 显影器，也不是需要手动启动的资源分析任务。v0.1.0 已发布签名安装包并
 收录进市场索引（同时归到「图片处理」与「格式扩展」两栏），需要支持 `image-preview@1` 的新版 Desktop。
 
+### 资源库人脸（`faces@1`）
+
+[Faces](plugins/faces/README.md) 把资源库的人脸功能做成插件：贡献 `faces@1` 域，用 YuNet 检测
+人脸框与五点关键点、用 SFace 提取 128 维特征，模型权重仍由宿主下载校验后通过只读目录交给插件
+（不塞进插件包，也不让每个用户重复下 39 MB）。它只声明 `addons:onnx`——加载 ONNX Runtime
+原生模块所需的唯一放宽；插件不读资源库数据库、不写任何目录，素材身份、聚类与墓碑语义全部留在
+宿主。**尚未收录进市场索引**：按本仓库规则，只有已发布签名安装包并完成校验的插件才能登记，
+源码先就位，安装包发布后再补索引条目。
+
 开发安装和测试方式见插件 README。
+
+## 插件能力声明
+
+`plugins[].permissions` 让插件在索引里公开它**进程**需要什么能力（插件进程按声明被关进对应的权限
+范围里，宿主在安装与启动时都会校验）。当前登记过的能力有五条：`network:configured-endpoint`、
+`sqlite:data:read`、`sqlite:data:read-write`、`sqlite:library:read`、`addons:onnx` —— 写别的会被
+`npm run check` 直接拒绝，因为旧客户端遇到未登记的能力会拒绝安装。
+
+需要 SQLite 的插件用插件私有数据目录（`<配置目录>/storage-plugins/<插件 id>/data/`）建库，并在
+可选的 `sqlite` 块里写明会建哪几个库、要多大配额：
+
+```json
+{
+  "permissions": ["sqlite:data:read-write"],
+  "sqlite": { "databases": ["faces.sqlite"], "quotaBytes": 268435456 }
+}
+```
+
+完整的能力表、作用域语义、界面文案与新增能力的流程见 [CAPABILITIES.md](CAPABILITIES.md)；
+宿主的执行方式（拼哪些 Node 参数、环境变量、配额与失败语义）见
+`emulsion-desktop-v3/docs/plugin-capabilities.md`。
 
 ## 市场分类
 

@@ -22,6 +22,15 @@ const SHA256_PATTERN = /^[0-9a-f]{64}$/
 // 「其他」，届时没人看得出是索引写错了。
 const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 const LOCALE_PATTERN = /^[a-z]{2}(?:-[A-Za-z]{2,8})*$/
+// 能力 id 不写在这里：本表是官方登记过的全部能力（宿主与根目录 CAPABILITIES.md 同步），
+// 客户端遇到没登记的能力会直接拒绝安装，所以校验必须比「格式对不对」更严——拼错一个字母就是装不上。
+const KNOWN_PERMISSIONS = new Set([
+  'network:configured-endpoint',
+  'sqlite:data:read',
+  'sqlite:data:read-write',
+  'sqlite:library:read',
+  'addons:onnx',
+])
 const RELEASE_PREFIX = 'https://github.com/ushaio/mo-gallery-plugin/releases/download/'
 const checkAssets = process.argv.includes('--check-assets')
 
@@ -91,6 +100,74 @@ function validateContribution(contribution, path) {
   }
 }
 
+// 能力 id 必须逐字命中 KNOWN_PERMISSIONS：客户端对未登记的能力会直接拒绝安装，
+// 所以拼错、漏拼、多写一段都不是「格式警告」，而是装不上的硬错误。
+function validatePermissions(plugin, path) {
+  if (plugin.permissions === undefined) return
+  if (!Array.isArray(plugin.permissions)) fail(`${path}.permissions must be an array`)
+  // 空数组等价于「不需要任何能力」，语义上应当省略字段，免得市场页渲染出一个空的权限块。
+  if (plugin.permissions.length === 0) fail(`${path}.permissions must be omitted when the plugin needs no capability`)
+  if (plugin.permissions.length > 8) fail(`${path}.permissions may declare at most 8 capabilities`)
+  const seen = new Set()
+  plugin.permissions.forEach((permission, permissionIndex) => {
+    const label = `${path}.permissions[${permissionIndex}]`
+    nonEmptyString(permission, label)
+    if (seen.has(permission)) fail(`${path}.permissions contains duplicate ${permission}`)
+    seen.add(permission)
+    if (!KNOWN_PERMISSIONS.has(permission)) {
+      fail(`${label} declares ${permission}, which is not a registered capability (see CAPABILITIES.md)`)
+    }
+  })
+  // --allow-addons 会让 Node 自己警告权限模型失效，只发给贡献 faces@1 的插件；
+  // 索引里提前挡掉，别让用户装完才发现宿主拒绝启动。
+  if (seen.has('addons:onnx')) {
+    const contributions = Array.isArray(plugin.contributions) ? plugin.contributions : []
+    if (!contributions.some(contribution => contribution && contribution.domain === 'faces')) {
+      fail(`${path}.permissions declares addons:onnx without a faces contribution`)
+    }
+  }
+}
+
+const SQLITE_DATABASE_PATTERN = /^[A-Za-z0-9._-]{1,64}\.(?:sqlite|db|sqlite3)$/
+const SQLITE_QUOTA_MIN_BYTES = 1024 * 1024
+const SQLITE_QUOTA_MAX_BYTES = 1024 * 1024 * 1024
+const SQLITE_QUOTA_DEFAULT_BYTES = 256 * 1024 * 1024
+
+// 范围块只是 permissions 的补充说明（写在哪、写多大），所以它不能独立存在：
+// 没有 sqlite: 能力却声明库文件与配额，说明 manifest 自相矛盾。
+function validateSqliteScope(plugin, path) {
+  if (plugin.sqlite === undefined) return
+  const scopePath = `${path}.sqlite`
+  if (!plugin.sqlite || typeof plugin.sqlite !== 'object' || Array.isArray(plugin.sqlite)) fail(`${scopePath} must be an object`)
+  exactKeys(plugin.sqlite, new Set(['databases', 'quotaBytes']), scopePath)
+  const permissions = Array.isArray(plugin.permissions) ? plugin.permissions : []
+  if (!permissions.some(permission => typeof permission === 'string' && permission.startsWith('sqlite:'))) {
+    fail(`${scopePath} is declared without any sqlite: capability`)
+  }
+  if (plugin.sqlite.databases !== undefined) {
+    if (!Array.isArray(plugin.sqlite.databases) || plugin.sqlite.databases.length === 0) {
+      fail(`${scopePath}.databases must be a non-empty array`)
+    }
+    if (plugin.sqlite.databases.length > 8) fail(`${scopePath}.databases accepts at most 8 file names`)
+    const seen = new Set()
+    plugin.sqlite.databases.forEach((database, databaseIndex) => {
+      const label = `${scopePath}.databases[${databaseIndex}]`
+      if (typeof database !== 'string' || !SQLITE_DATABASE_PATTERN.test(database)) {
+        fail(`${label} must be a file name ending in .sqlite, .db or .sqlite3`)
+      }
+      if (seen.has(database)) fail(`${scopePath}.databases contains duplicate ${database}`)
+      seen.add(database)
+    })
+  }
+  if (plugin.sqlite.quotaBytes !== undefined) {
+    const quota = plugin.sqlite.quotaBytes
+    // 上限存在的意义是不让插件把用户磁盘吃满；下限是给 SQLite 留出 page + journal 的最小空间。
+    if (!Number.isSafeInteger(quota) || quota < SQLITE_QUOTA_MIN_BYTES || quota > SQLITE_QUOTA_MAX_BYTES) {
+      fail(`${scopePath}.quotaBytes must be an integer between ${SQLITE_QUOTA_MIN_BYTES} and ${SQLITE_QUOTA_MAX_BYTES}`)
+    }
+  }
+}
+
 function validateCategory(category, path, ids, domainOwners) {
   if (!category || typeof category !== 'object' || Array.isArray(category)) fail(`${path} must be an object`)
   exactKeys(category, new Set(['id', 'name', 'domains']), path)
@@ -144,7 +221,7 @@ function validatePlugin(plugin, index, ids, categoryIds) {
   if (!plugin || typeof plugin !== 'object' || Array.isArray(plugin)) fail(`${path} must be an object`)
   exactKeys(plugin, new Set([
     'id', 'name', 'description', 'author', 'version', 'coreApiVersion', 'category',
-    'contributions', 'homepage', 'repository', 'platforms',
+    'contributions', 'permissions', 'sqlite', 'homepage', 'repository', 'platforms',
   ]), path)
   if (typeof plugin.id !== 'string' || !ID_PATTERN.test(plugin.id)) fail(`${path}.id is invalid`)
   if (ids.has(plugin.id)) fail(`${path}.id duplicates ${plugin.id}`)
@@ -178,6 +255,9 @@ function validatePlugin(plugin, index, ids, categoryIds) {
     if (!Array.isArray(plugin.contributions)) fail(`${path}.contributions must be an array`)
     plugin.contributions.forEach((item, contributionIndex) => validateContribution(item, `${path}.contributions[${contributionIndex}]`))
   }
+  // 先校验 contributions，再校验 permissions：addons:onnx 的合法性取决于是否贡献了 faces 域。
+  validatePermissions(plugin, path)
+  validateSqliteScope(plugin, path)
   if (!plugin.platforms || typeof plugin.platforms !== 'object' || Array.isArray(plugin.platforms)) fail(`${path}.platforms must be an object`)
   for (const [platform, artifact] of Object.entries(plugin.platforms)) {
     if (!PLATFORMS.has(platform)) fail(`${path}.platforms contains unsupported platform ${platform}`)

@@ -46,6 +46,42 @@
         }
       }
     },
+    "sqliteScope": {
+      "description": "permissions 的补充说明：插件会创建哪些库文件、请求多大的数据目录。它不能独立存在——没有 sqlite: 能力却写这一块，说明 manifest 自相矛盾，校验会拒绝。",
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "databases": {
+          "description": "插件会创建的库文件名（不是路径），必须落在它自己的数据目录里。",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._-]{1,64}\\.(sqlite|db|sqlite3)$"
+          },
+          "uniqueItems": true,
+          "minItems": 1,
+          "maxItems": 8
+        },
+        "quotaBytes": {
+          "description": "请求的数据目录上限（1 MiB – 1 GiB，省略按宿主默认 256 MiB）；超出上限时宿主会拒绝启动或终止进程。",
+          "type": "integer",
+          "minimum": 1048576,
+          "maximum": 1073741824
+        }
+      }
+    },
+    "permissionId": {
+      "description": "插件进程需要的能力，写法 <namespace>:<subject>[:<access>]。这里的取值必须与插件包内 manifest.json 的 permissions 一致，并且只能取官方登记过的能力——未登记的能力会被宿主拒绝安装，所以这份枚举有意写死。完整语义、作用域与界面文案见 CAPABILITIES.md。",
+      "type": "string",
+      "enum": [
+        "network:configured-endpoint",
+        "sqlite:data:read",
+        "sqlite:data:read-write",
+        "sqlite:library:read",
+        "addons:onnx"
+      ]
+    },
     "artifact": {
       "type": "object",
       "additionalProperties": false,
@@ -92,6 +128,15 @@
           "type": "array",
           "items": { "$ref": "#/$defs/contribution" }
         },
+        "permissions": {
+          "description": "安装前预览的插件进程能力，必须与包内 manifest.json 的 permissions 一致（权威是包内那份）。字符串数组、不得重复、最多 8 个，取值见 permissionId；没有任何能力时省略本字段，不要写空数组。",
+          "type": "array",
+          "items": { "$ref": "#/$defs/permissionId" },
+          "uniqueItems": true,
+          "minItems": 1,
+          "maxItems": 8
+        },
+        "sqlite": { "$ref": "#/$defs/sqliteScope" },
         "homepage": { "type": "string", "format": "uri" },
         "repository": { "type": "string", "format": "uri" },
         "platforms": {

@@ -1,0 +1,15 @@
+{
+  "name": "mo-gallery-plugin-faces",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "faces@1 plugin: YuNet detection + SFace embedding for the MO Gallery local resource library.",
+  "engines": { "node": ">=22 <23" },
+  "scripts": {
+    "start": "node src/index.mjs",
+    "build": "node scripts/build.mjs",
+    "test": "node --test",
+    "test:unit": "node --test tests/frames.test.mjs tests/protocol.test.mjs tests/face.test.mjs",
+    "test:e2e": "node --test tests/contract.test.mjs tests/sidecar-parity.test.mjs"
+  }
+}

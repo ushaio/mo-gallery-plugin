@@ -13,6 +13,11 @@ belongs in each plugin's own repository.
 - The host implementation is authoritative when documentation and code differ.
 - Only list signed, immutable packages already uploaded to this repository's Releases.
 - Do not list planned, locally built, or unsigned plugins.
+- Capability declarations (`plugins[].permissions`, `CAPABILITIES.md`) are a two-repo
+  contract: the host whitelist and startup-flag enforcement live in
+  `emulsion-desktop-v3` (`docs/plugin-capabilities.md`). Register a new id on both
+  sides in the same change, and never weaken the enum to "any string" — clients
+  refuse unknown capabilities at install time.
 
 ## Required Checks
 

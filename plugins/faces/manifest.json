@@ -1,0 +1,17 @@
+{
+  "id": "faces",
+  "version": "0.1.0",
+  "coreApiVersion": "1",
+  "name": "Faces",
+  "description": "Local face detection and recognition for the resource library: YuNet detects, SFace embeds. Nothing leaves the machine.",
+  "runtime": { "type": "node", "version": "node22", "entry": "src/index.mjs" },
+  "platforms": ["windows-amd64", "darwin-amd64", "darwin-arm64", "linux-amd64", "linux-arm64"],
+  "contributions": [
+    {
+      "domain": "faces",
+      "apiVersion": "1",
+      "capabilities": ["faces.models", "faces.detect", "faces.embed"]
+    }
+  ],
+  "permissions": ["addons:onnx"]
+}

@@ -10,6 +10,8 @@
 4. `signature.sig` 使用 Desktop 信任的 Ed25519 发布密钥签署 `checksums.json` 的原始字节。
 5. 包内没有符号链接、重复路径、绝对路径或目录穿越路径。
 6. 插件源码、权限、凭据使用和网络访问已经完成评审。
+7. 需要的能力已在包内 `manifest.json` 的 `permissions` 里按最小作用域声明（登记过的能力表与语义见
+   [CAPABILITIES.md](CAPABILITIES.md)），并与索引条目里的 `permissions` 镜像一致。
 
 ## 发布流程
 
@@ -44,6 +46,13 @@ Node 插件由 Desktop 内置的 Node 22 运行时启动，同一纯 JavaScript 
   会拒绝没声明过的取值、同一插件里的重复取值，以及被两栏同时认领的能力域。
 - 平台键仅限 `windows-amd64`、`darwin-amd64`、`darwin-arm64`、
   `linux-amd64`、`linux-arm64`。
+- `permissions` 可选，用来在安装前把插件进程需要的能力摆给用户看，取值与包内 `manifest.json`
+  完全一致（权威是包内那份）：必须是 [CAPABILITIES.md](CAPABILITIES.md) 里登记过的能力，最多 8 个、
+  不得重复；不需要任何能力时**省略字段**，不要写空数组。`addons:onnx` 只允许贡献了 `faces@1`
+  且通过安全评审的插件声明。
+- `sqlite` 可选，是 `permissions` 的补充说明：`databases`（会创建的库文件名，≤8 个，扩展名限
+  `.sqlite` / `.db` / `.sqlite3`）与 `quotaBytes`（数据目录上限，1 MiB – 1 GiB）。没有声明任何
+  `sqlite:` 能力时不许出现这一块。
 - `sha256` 使用 64 位小写十六进制，不带 `sha256:` 前缀。
 - `size` 是 Release ZIP 的准确字节数，且必须大于 0、不超过 256 MiB。
 
@@ -51,6 +60,7 @@ Node 插件由 Desktop 内置的 Node 22 运行时启动，同一纯 JavaScript 
 
 - 说明插件用途、源码仓库和发布版本。
 - 列出构建与 contract test 结果。
-- 列出申请的 contributions、permissions 和 signing key ID。
+- 列出申请的 contributions、permissions（含 `sqlite` 作用域与配额，语义见
+  [CAPABILITIES.md](CAPABILITIES.md)）和 signing key ID。
 - 确认所有资产都通过 `npm run check:assets`。
 - 安全相关变更按 [SECURITY.md](SECURITY.md) 私下报告，不在公开 Issue 中披露密钥或漏洞细节。
