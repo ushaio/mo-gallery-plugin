@@ -16,6 +16,7 @@ const PLATFORMS = new Set([
 ])
 const ID_PATTERN = /^[A-Za-z0-9._-]+$/
 const VERSION_PATTERN = /^v?\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/
+const DESKTOP_VERSION_PATTERN = /^\d+\.\d+(?:\.\d+){0,2}$/
 const SHA256_PATTERN = /^[0-9a-f]{64}$/
 // 分类栏词表不写在这里：`categories.json` 自己就是分类 API（客户端直接拉这份文件渲染左栏），
 // 校验只负责挡住「拼错 / 大小写混用 / 用了没声明的栏」——错值到了客户端会被静默归进
@@ -221,7 +222,7 @@ function validatePlugin(plugin, index, ids, categoryIds) {
   if (!plugin || typeof plugin !== 'object' || Array.isArray(plugin)) fail(`${path} must be an object`)
   exactKeys(plugin, new Set([
     'id', 'name', 'description', 'author', 'version', 'coreApiVersion', 'category',
-    'contributions', 'permissions', 'sqlite', 'homepage', 'repository', 'platforms',
+    'contributions', 'permissions', 'sqlite', 'homepage', 'repository', 'platforms', 'minDesktopVersion',
   ]), path)
   if (typeof plugin.id !== 'string' || !ID_PATTERN.test(plugin.id)) fail(`${path}.id is invalid`)
   if (ids.has(plugin.id)) fail(`${path}.id duplicates ${plugin.id}`)
@@ -229,6 +230,13 @@ function validatePlugin(plugin, index, ids, categoryIds) {
   localizedText(plugin.name, `${path}.name`, true)
   if (typeof plugin.version !== 'string' || !VERSION_PATTERN.test(plugin.version)) fail(`${path}.version is invalid`)
   nonEmptyString(plugin.coreApiVersion, `${path}.coreApiVersion`)
+  if (plugin.minDesktopVersion !== undefined) {
+    // 最低桌面端版本：宿主按它决定「能不能装」，旧客户端不认识这个字段会忽略它（域校验兜底），
+    // 所以这里只挡写法——写错一个点，用户得到的是一条永远装不上的条目。
+    if (typeof plugin.minDesktopVersion !== 'string' || !DESKTOP_VERSION_PATTERN.test(plugin.minDesktopVersion)) {
+      fail(`${path}.minDesktopVersion must look like 0.8.6`)
+    }
+  }
   if (plugin.category !== undefined) {
     // 字符串与字符串数组都收：写多个表示同时挂在多栏下，客户端会在每一栏里各列一次。
     const listed = Array.isArray(plugin.category) ? plugin.category : [plugin.category]

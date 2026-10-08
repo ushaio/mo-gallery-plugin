@@ -57,6 +57,16 @@ Ed25519 签名、运行时和兼容性校验。
 宿主的执行方式（拼哪些 Node 参数、环境变量、配额与失败语义）见
 `emulsion-desktop-v3/docs/plugin-capabilities.md`。
 
+## 最低桌面端版本
+
+`plugins[].minDesktopVersion` 声明**运行**该插件所需的最低 Desktop 版本（如 `0.8.6`）。它解决的是
+「索引条目先上架、所需宿主能力要等桌面端下一次发版」这种时间差：比它旧的 Desktop 仍会在市场里看到
+这个插件（并看到「需要 Desktop 0.8.6 或更高版本」这类原因），但安装被拒绝。省略表示不限制。
+
+判定在宿主侧：`emulsion-desktop-v3/storage_plugins/marketplace.go` 拿客户端版本比对，不满足时把条目
+标成不可用（`available: false`，原因写进 `compatibilityStatus`），**条目本身照常列出**；旧版 Desktop
+不认识这个字段会忽略它，退回按能力域判断（也就是今天的行为）。
+
 ## 市场分类
 
 `categories.json` 是市场分栏的唯一来源：Desktop 拉取它渲染左栏，栏名取 `name` 里当前界面

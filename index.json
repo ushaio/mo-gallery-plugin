@@ -258,6 +258,7 @@
         }
       ],
       "permissions": ["addons:onnx"],
+      "minDesktopVersion": "0.8.6",
       "homepage": "https://github.com/ushaio/mo-gallery-plugin/tree/master/plugins/faces",
       "repository": "https://github.com/ushaio/mo-gallery-plugin/tree/master/plugins/faces",
       "platforms": {

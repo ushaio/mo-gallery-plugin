@@ -112,6 +112,11 @@
         "author": { "type": "string" },
         "version": { "type": "string", "pattern": "^v?[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$" },
         "coreApiVersion": { "type": "string", "minLength": 1 },
+        "minDesktopVersion": {
+          "description": "运行这个插件所需要的最低 Desktop 版本（如 0.8.6）。省略表示不限制。填写后：版本更低的 Desktop 仍然会在市场里看到这个插件（条目照常列出，说明为什么装不了），但安装会被拒绝并提示升级——用于「宿主能力刚随新版 Desktop 上线、旧版装了也跑不起来」的插件。权威判定在宿主侧（storage_plugins/marketplace.go），这里只约束写法。",
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+(\\.[0-9]+){0,2}$"
+        },
         "category": {
           "description": "Marketplace shelves this plugin belongs to, written as slugs declared in categories.json（客户端把该文件当作分类 API 拉取：栏名与顺序都在那里）。字符串与字符串数组都收，写多个表示同时挂在多栏下；省略时客户端按能力域兜底，兜不到就落进它的「其他」栏。",
           "oneOf": [
