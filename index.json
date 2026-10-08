@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-06T03:10:00Z",
+  "updatedAt": "2026-10-08T00:49:54Z",
   "plugins": [
     {
       "id": "s3-compatible",
@@ -232,6 +232,59 @@
           "url": "https://github.com/ushaio/mo-gallery-plugin/releases/download/hasselblad-3fr-v0.1.0/hasselblad-3fr-0.1.0.zip",
           "sha256": "665f951bdf6ad2875fe65272b2117ee5e0586db8064e11881f1b9f9b4bff3fa7",
           "size": 6032
+        }
+      }
+    },
+    {
+      "id": "faces",
+      "name": { "zh": "人脸识别", "en": "Faces" },
+      "description": {
+        "zh": "在本地识别资源库里的人脸：YuNet 检出人脸框与五点关键点，SFace 提取 128 维特征，全部在本机完成、不上传。",
+        "en": "Detect and recognise faces in the local library: YuNet finds faces with five key points, SFace extracts 128-d features. Everything runs on this machine."
+      },
+      "author": "MO Gallery",
+      "version": "0.1.0",
+      "coreApiVersion": "1",
+      "category": "library",
+      "contributions": [
+        {
+          "domain": "faces",
+          "apiVersion": "1",
+          "capabilities": [
+            "faces.models",
+            "faces.detect",
+            "faces.embed"
+          ]
+        }
+      ],
+      "permissions": ["addons:onnx"],
+      "homepage": "https://github.com/ushaio/mo-gallery-plugin/tree/master/plugins/faces",
+      "repository": "https://github.com/ushaio/mo-gallery-plugin/tree/master/plugins/faces",
+      "platforms": {
+        "windows-amd64": {
+          "url": "https://github.com/ushaio/mo-gallery-plugin/releases/download/faces-v0.1.0/faces-0.1.0.zip",
+          "sha256": "d04110e83c83c151a066e13d60bbff5d34ea5e70977a2798b9fae2e69960adcc",
+          "size": 26934
+        },
+        "darwin-amd64": {
+          "url": "https://github.com/ushaio/mo-gallery-plugin/releases/download/faces-v0.1.0/faces-0.1.0.zip",
+          "sha256": "d04110e83c83c151a066e13d60bbff5d34ea5e70977a2798b9fae2e69960adcc",
+          "size": 26934
+        },
+        "darwin-arm64": {
+          "url": "https://github.com/ushaio/mo-gallery-plugin/releases/download/faces-v0.1.0/faces-0.1.0.zip",
+          "sha256": "d04110e83c83c151a066e13d60bbff5d34ea5e70977a2798b9fae2e69960adcc",
+          "size": 26934
+        },
+        "linux-amd64": {
+          "url": "https://github.com/ushaio/mo-gallery-plugin/releases/download/faces-v0.1.0/faces-0.1.0.zip",
+          "sha256": "d04110e83c83c151a066e13d60bbff5d34ea5e70977a2798b9fae2e69960adcc",
+          "size": 26934
+        },
+        "linux-arm64": {
+          "url": "https://github.com/ushaio/mo-gallery-plugin/releases/download/faces-v0.1.0/faces-0.1.0.zip",
+          "sha256": "d04110e83c83c151a066e13d60bbff5d34ea5e70977a2798b9fae2e69960adcc",
+          "size": 26934
         }
       }
     }

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-06T01:56:00Z",
+  "updatedAt": "2026-10-08T00:49:54Z",
   "categories": [
     {
       "id": "storage",
@@ -27,7 +27,7 @@
     {
       "id": "library",
       "name": { "zh": "资源库与检索", "en": "Library & search" },
-      "domains": ["library"]
+      "domains": ["library", "faces"]
     },
     {
       "id": "publishing",
