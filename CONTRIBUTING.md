@@ -53,8 +53,9 @@ Node 插件由 Desktop 内置的 Node 22 运行时启动，同一纯 JavaScript 
   `linux-amd64`、`linux-arm64`。
 - `permissions` 可选，用来在安装前把插件进程需要的能力摆给用户看，取值与包内 `manifest.json`
   完全一致（权威是包内那份）：必须是 [CAPABILITIES.md](CAPABILITIES.md) 里登记过的能力，最多 8 个、
-  不得重复；不需要任何能力时**省略字段**，不要写空数组。`addons:onnx` 只允许贡献了 `faces@1`
-  且通过安全评审的插件声明。
+  不得重复；不需要任何能力时**省略字段**，不要写空数组。`addons:onnx` 只允许贡献了 `faces@1` 或
+  `embedding@1` 且通过安全评审的插件声明（域白名单在 `scripts/validate-index.mjs` 与宿主
+  `storage_plugins/capabilities.go` 两处同改）。
 - `sqlite` 可选，是 `permissions` 的补充说明：`databases`（会创建的库文件名，≤8 个，扩展名限
   `.sqlite` / `.db` / `.sqlite3`）与 `quotaBytes`（数据目录上限，1 MiB – 1 GiB）。没有声明任何
   `sqlite:` 能力时不许出现这一块。

@@ -1,0 +1,17 @@
+{
+  "id": "embedding",
+  "version": "0.1.0",
+  "coreApiVersion": "1",
+  "name": "Semantic embedding",
+  "description": "Local multimodal embeddings for the resource library: natural-language photo search and semantic similarity. Models are downloaded and verified by the host; nothing leaves the machine.",
+  "runtime": { "type": "node", "version": "node22", "entry": "src/index.mjs" },
+  "platforms": ["windows-amd64", "darwin-amd64", "darwin-arm64", "linux-amd64", "linux-arm64"],
+  "contributions": [
+    {
+      "domain": "embedding",
+      "apiVersion": "1",
+      "capabilities": ["embedding.models", "embedding.text", "embedding.image"]
+    }
+  ],
+  "permissions": ["addons:onnx"]
+}

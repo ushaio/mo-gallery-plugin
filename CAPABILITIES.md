@@ -26,7 +26,7 @@
 | `sqlite:data:read` | 插件私有数据目录 `<data>/` | 只读 | 启动参数加 `--allow-fs-read=<data>`，并注入环境变量 `MO_GALLERY_PLUGIN_DATA`。 |
 | `sqlite:data:read-write` | 插件私有数据目录 `<data>/` | 读写 | 启动参数加 `--allow-fs-read=<data> --allow-fs-write=<data>`，并注入 `MO_GALLERY_PLUGIN_DATA`。 |
 | `sqlite:library:read` | 当前打开的资源库 | 只读 | 启动参数加 `--allow-fs-read=<库根>/.mo-gallery`（**不加写权限**），并注入 `MO_GALLERY_LIBRARY_DB`。插件必须用只读方式打开（`new DatabaseSync(path, { readOnly: true })` 或 `file:…?mode=ro`）。 |
-| `addons:onnx` | 插件进程加载原生扩展 | — | 启动参数加 `--allow-addons`。只发给贡献 `faces@1` 且通过评审的插件——它会加载 ONNX Runtime 之类的原生模块，Node 自己也会警告这会让权限模型失效，所以是逐插件授予，不是通用开关。 |
+| `addons:onnx` | 插件进程加载原生扩展 | — | 启动参数加 `--allow-addons`。只发给**已通过评审、且宿主侧契约写在 `capabilities.go` 里的域**——当前是 `faces@1`（人脸检测/特征）与 `embedding@1`（语义向量）。它会加载 ONNX Runtime 之类的原生模块，Node 自己也会警告这会让权限模型失效，所以是逐插件授予，不是通用开关；新增一个域必须宿主与市场两侧同改。 |
 
 两点约定：
 
@@ -77,7 +77,7 @@
 
 - 字符串数组，最多 8 个、不得重复、只能取上表的 id。
 - 用途是市场页展示与安装前预览；**权威仍是包内 manifest**，两者不一致的插件不进索引。
-- `npm run check` 会拒绝：未知 id、重复项、空数组（不要写 `"permissions": []`，直接省略字段）、以及在没声明 `faces@1` 贡献时声明 `addons:onnx`；索引里的 `sqlite` 镜像同样按 `databases`（≤8、扩展名限定 `/\.(sqlite|db|sqlite3)$/`）与 `quotaBytes`（1 MiB – 1 GiB）校验，且没有 `sqlite:` 能力时不许出现。
+- `npm run check` 会拒绝：未知 id、重复项、空数组（不要写 `"permissions": []`，直接省略字段）、以及在没声明 `faces@1`/`embedding@1` 贡献时声明 `addons:onnx`；索引里的 `sqlite` 镜像同样按 `databases`（≤8、扩展名限定 `/\.(sqlite|db|sqlite3)$/`）与 `quotaBytes`（1 MiB – 1 GiB）校验，且没有 `sqlite:` 能力时不许出现。
 
 ## 界面上的说明文案
 
@@ -90,7 +90,6 @@
 | `sqlite:data:read-write` | 读写插件自己的数据 | Reads and writes this plugin's own data |
 | `sqlite:library:read` | 读取资源库元数据（只读） | Reads library metadata (read-only) |
 | `addons:onnx` | 加载原生推理模块（ONNX） | Loads native inference modules (ONNX) |
-
 ## 新增能力 id 的流程
 
 新能力要**两边同时改**，并走一次安全评审：

@@ -32,6 +32,10 @@ const KNOWN_PERMISSIONS = new Set([
   'sqlite:library:read',
   'addons:onnx',
 ])
+// `addons:onnx` 的域白名单，宿主对应 `storage_plugins/capabilities.go` 的
+// `registeredCapabilities["addons:onnx"].domains`。加一个域必须两边同改：这里拦住的是
+// 「市场能过、宿主不认」，反过来宿主不认时用户已经装上了。
+const ONNX_ADDON_DOMAINS = new Set(['faces', 'embedding'])
 const RELEASE_PREFIX = 'https://github.com/ushaio/mo-gallery-plugin/releases/download/'
 const checkAssets = process.argv.includes('--check-assets')
 
@@ -119,12 +123,13 @@ function validatePermissions(plugin, path) {
       fail(`${label} declares ${permission}, which is not a registered capability (see CAPABILITIES.md)`)
     }
   })
-  // --allow-addons 会让 Node 自己警告权限模型失效，只发给贡献 faces@1 的插件；
-  // 索引里提前挡掉，别让用户装完才发现宿主拒绝启动。
+  // --allow-addons 会让 Node 自己警告权限模型失效，只发给已通过评审、且宿主侧契约写在
+  // capabilities.go 里的域（当前是 faces 与 embedding）；索引里提前挡掉，别让用户装完才发现
+  // 宿主拒绝启动。两个名字必须与宿主 `registeredCapabilities["addons:onnx"].domains` 保持一致。
   if (seen.has('addons:onnx')) {
     const contributions = Array.isArray(plugin.contributions) ? plugin.contributions : []
-    if (!contributions.some(contribution => contribution && contribution.domain === 'faces')) {
-      fail(`${path}.permissions declares addons:onnx without a faces contribution`)
+    if (!contributions.some(contribution => contribution && ONNX_ADDON_DOMAINS.has(contribution.domain))) {
+      fail(`${path}.permissions declares addons:onnx without a ${[...ONNX_ADDON_DOMAINS].join('/')} contribution`)
     }
   }
 }

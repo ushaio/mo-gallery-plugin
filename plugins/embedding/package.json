@@ -1,0 +1,14 @@
+{
+  "name": "mo-gallery-plugin-embedding",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "embedding@1 plugin: EmbeddingGemma 2 multimodal text/image embeddings for the MO Gallery local resource library.",
+  "engines": { "node": ">=22 <23" },
+  "scripts": {
+    "start": "node src/index.mjs",
+    "test": "node --test",
+    "build": "node scripts/build.mjs",
+    "probe": "node scripts/probe.mjs"
+  }
+}
