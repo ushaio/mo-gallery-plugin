@@ -1,3 +1,5 @@
 node_modules/
 dist/
 *.log
+# 界面由 src/ui.ts 打包而来（ui/index.html 与 ui/app.css 是手写源文件）
+ui/app.js

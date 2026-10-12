@@ -2,7 +2,7 @@ import type { PluginManifest } from '@mo-gallery/plugin-sdk'
 
 export const manifest: PluginManifest = {
   id: 's3-compatible',
-  version: '0.1.2',
+  version: '0.2.0',
   coreApiVersion: '1',
   apiVersion: '1',
   type: 'node',
@@ -16,8 +16,13 @@ export const manifest: PluginManifest = {
     domain: 'storage',
     apiVersion: '1',
     capabilities: ['plugin.health', 'source.validate', 'object.put', 'object.get', 'object.stat', 'object.list', 'object.move', 'object.delete', 'object.getUrl', 'checksum', 'idempotency'],
+  }, {
+    domain: 'ui',
+    apiVersion: '1',
+    capabilities: ['ui.config'],
   }],
   permissions: ['network:configured-endpoint'],
+  ui: { entry: 'ui/index.html' },
   configSchema: {
     type: 'object',
     properties: {
