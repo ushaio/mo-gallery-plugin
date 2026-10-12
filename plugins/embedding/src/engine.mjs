@@ -30,7 +30,7 @@ import { stat } from 'node:fs/promises'
 import { join } from 'node:path'
 import { ERROR_CODES, ProtocolError } from './errors.mjs'
 import { MIN_GRID } from './image.mjs'
-import { loadOnnxRuntime } from './onnx.mjs'
+import { loadOnnxRuntime, onnxRuntimeRoot } from './onnx.mjs'
 import {
   DEFAULT_VARIANT,
   EMBEDDING_DIM_DEFAULT,

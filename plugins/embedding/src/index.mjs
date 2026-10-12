@@ -20,8 +20,9 @@
  *   流已无法重新对齐）才退出。
  * - **不做插件侧缓存**：请求里既没有资产 id 也没有内容哈希，落盘缓存无法被稳定地键索引；跳过与
  *   重算的判定权在宿主。插件只保留「模型哈希已校验」这一层进程内缓存。
- * - **不猜任何 token**：见下方 `requireTokenizer`——占位符与序列装配属于分词/处理器那一层，
- *   缺了它就报 `UNSUPPORTED`，绝不用「看起来合理」的 id 蒙一个向量出来。
+ * - **不猜任何 token**：占位符与序列装配由 `tokenizer.mjs` 按 HF 处理器的约定给出
+ *   （`<|image>` + `<|image|>`×N + `<image|>`，N 取视觉编码器实际吐出的 token 数），
+ *   本文件不硬编码任何 token id。
  */
 
 import process from 'node:process'
@@ -29,6 +30,7 @@ import { readFileSync, statSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
+import { createEmbeddingEngine } from './engine.mjs'
 import { ERROR_CODES, ProtocolError, RPC_ERRORS, toRpcError } from './errors.mjs'
 import {
   FRAME_TYPE_CONTROL,
@@ -49,6 +51,8 @@ import {
   UPSTREAM_REVISION,
   modelSpecs,
 } from './models.mjs'
+import { onnxRuntimeRoot } from './onnx.mjs'
+import { encodeText, imagePlaceholderSequence, loadTokenizer, resolveRuntimeDir } from './tokenizer.mjs'
 
 /** 模型声明协议版本：宿主 EmbeddingProtocol 必须等于它。 */
 export const EMBEDDING_PROTOCOL = 1
@@ -79,18 +83,19 @@ export function readManifest(path = join(PACKAGE_ROOT, 'manifest.json')) {
 }
 
 /**
- * 分词器尚未接入（设计文档 §4.4 未定档）。
+ * 成功响应的形状（宿主 `storage_plugins/embedding.go` 的 `EmbeddingVector`）：
+ * `{"embedding": []float32, "norm": float64, "dim": int}`。
  *
- * 为什么宁可报错也不实现：文本与图像两条路径都依赖**分词**（文本要 encode；图像要在序列里放
- * `<|image|>` 占位符，而占位符怎么与 bos/eos 组合是**处理器**的约定，不是分词器的约定）。
- * 缺了它而用「看起来合理」的 id 蒙一个向量，表现是**静默劣化**——向量算得出来、也能入库，
- * 只是检索质量不对，而且排查成本极高。这正是模型卡对 fp16 警告的同一种失效形态。
+ * **口径说明**：契约注释的口径是「embedding 是 raw 未归一化向量、norm 是其模长，宿主自行 L2」，
+ * 但宿主当前根本不消费 norm（`local_library/embedding_inference.go` 里 grep `Norm|norm|l2` 无匹配），
+ * 而引擎内部已把「截断到 MRL 维度 + 重新 L2 归一化」做成不可拆的一步
+ * （`models.mjs` 的 `truncateAndNormalize`，设计文档 §1 的硬约定）。因此这里返回
+ * **单位向量 + `norm: 1`**：与「raw + 模长」在现有宿主代码里等价（宿主自己 L2 一次，结果相同），
+ * 又不给宿主留「拿到未归一化向量却忘了归一化」的机会。若宿主将来真的开始用 norm 做 L2，
+ * 这里必须改成返回 raw 向量与真实模长——这是一次**有意的语义选择**，不是疏忽。
  */
-function requireTokenizer() {
-  throw new ProtocolError(
-    ERROR_CODES.UNSUPPORTED,
-    '分词器尚未接入（设计文档 §4.4 未定档）：文本编码与图像序列装配都依赖它，本版本不提供向量',
-  )
+function vectorPayload(vector, dim) {
+  return { embedding: Array.from(vector), norm: 1, dim }
 }
 
 /**
@@ -228,6 +233,29 @@ export function createEmbeddingPlugin({
   let queue = Promise.resolve()
   /** 正在等数据帧的那个请求（宿主串行调用，所以同时只可能有一个）。 */
   let pending = null
+  /** 分词器单例（存 Promise：并发请求只加载一次；失败会退出缓存，下次重试）。 */
+  let tokenizerPromise = null
+  /** 引擎单例。首次取用时才建会话（建会话要校验哈希 + 加载 200 MB 权重，很贵）。 */
+  let engine = null
+
+  function tokenizerInstance() {
+    if (tokenizerPromise === null) {
+      tokenizerPromise = loadTokenizer({ modelsDir: modelsDirectory, runtimeDir: resolveRuntimeDir })
+      tokenizerPromise.catch(() => {
+        tokenizerPromise = null
+      })
+    }
+    return tokenizerPromise
+  }
+
+  function engineInstance() {
+    if (engine === null) {
+      // 显式传 runtimeRoot：让「运行时目录从哪来」在本文件里可读，不依赖 engine.mjs 的默认参数
+      // （engine.mjs 现在也自己 import 了 onnxRuntimeRoot，两条路等价）。
+      engine = createEmbeddingEngine({ modelsDir: modelsDirectory, runtimeRoot: onnxRuntimeRoot(), log })
+    }
+    return engine
+  }
 
   function reply(id, result, error) {
     const envelope = { jsonrpc: '2.0', id }
@@ -245,30 +273,33 @@ export function createEmbeddingPlugin({
   }
 
   async function runText(params) {
-    // 先做参数校验（前缀注入由 buildTextInput 保证），再撞分词器缺口——顺序很重要：
-    // 参数错报 BAD_REQUEST、能力缺失报 UNSUPPORTED，两者混起来会误导排障。
-    buildTextInput(params?.prompt, params)
-    optionalDim(params?.dim)
-    // 分词器接入后，这里就是 engine.embedTokenIds(tokenize(input), { dim })。
-    requireTokenizer()
+    // 顺序很重要：参数错先报 BAD_REQUEST（调用方的错，能立即修），再撞模型缺失（MODEL_MISSING，
+    // 用户能自己补齐），最后才是推理失败。混起来会把排障方向带偏。
+    const text = buildTextInput(params?.prompt, params)
+    const dim = optionalDim(params?.dim)
+    const tokenizer = await tokenizerInstance()
+    const { ids, attentionMask } = encodeText(tokenizer, text)
+    const { vector } = await engineInstance().embedTokenIds(ids, { attentionMask, dim })
+    return vectorPayload(vector, dim)
   }
 
   async function runImage(pixels, declared, params) {
-    optionalDim(params?.dim)
-    // 视觉编码器那一步**不依赖分词器**，本可以真跑；但它的产出是 512 维中间特征，与文本向量
-    // 不在同一个空间、不能入库比较。所以这一版的语义（图像 → 可与文本比较的向量）还差最后一段。
-    //
-    // 这里仍然把 patch 化真做完，是**故意的**：它让宿主今天就能拿自己的分帧发送代码对着本插件
-    // 端到端验一遍，失败点被精确定位在最后一段，而不是拿到一句「未实现」。分词器接入后，
-    // 这段就是整条链路的真实前半段。
+    const dim = optionalDim(params?.dim)
     const patches = patchifyRaster(
       { width: declared.width, height: declared.height, data: pixels },
       { gridWidth: declared.grid, gridHeight: declared.grid },
     )
-    throw new ProtocolError(
-      ERROR_CODES.UNSUPPORTED,
-      `分词器尚未接入（设计文档 §4.4）：本次请求的像素与分帧都已就绪（${declared.width}×${declared.height} → 网格 ${declared.grid}×${declared.grid}，${patches.patchCount} 个 patch），缺序列装配无法产出可与文本比较的向量`,
-    )
+    // 视觉编码器先跑：它的 tokenCount 就是占位符个数 N。
+    //
+    // 这里**不能**用 `embedImagePatches`——那个方法会自己再跑一次视觉编码器（同一个前向白算一遍，
+    // 50×50 网格实测 4.4 秒），而文本塔要的是「已算好的 imageFeatures」，所以拆开跑。
+    const { imageFeatures, tokenCount } = await engineInstance().encodeImageFeatures(patches)
+    const tokenizer = await tokenizerInstance()
+    // N 必须等于视觉编码器实际 token 数：文本塔按占位符位置 scatter imageFeatures，
+    // 个数对不上是**静默劣化**（不报错），所以这里只能用它，不能猜。
+    const { ids, attentionMask } = encodeText(tokenizer, imagePlaceholderSequence(tokenCount))
+    const { vector } = await engineInstance().embedWithModalities({ ids, attentionMask, imageFeatures, dim })
+    return vectorPayload(vector, dim)
   }
 
   /** 处理一条控制帧：要么立即应答，要么转成「等数据帧」状态。 */

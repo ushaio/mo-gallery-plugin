@@ -50,6 +50,27 @@ export const IMAGE_SOFT_TOKENS = 280
 export const SENTENCE_EMBEDDING_OUTPUT = 'sentence_embedding'
 
 /**
+ * 多模态占位符字面量。
+ *
+ * 来源两处，缺一不可：
+ *   1. `tokenizer.json` 同级目录下 `tokenizer_config.json` 的 `boi_token` / `image_token` /
+ *      `eoi_token`（另含 `extra_special_tokens` 与 `model_specific_special_tokens.video_token`
+ *      里的 `<|video|>`）；
+ *   2. HF 参考实现 `processing_embedding_gemma2.py` 的
+ *      `replace_image_token()`：`f"{self.boi_token}{self.image_token * num_soft_tokens}{self.eoi_token}"`。
+ *
+ * 图像序列因此是 `'<|image>' + '<|image|>'.repeat(N) + '<image|>'`，N = 视觉编码器实际 token 数。
+ * 实测（真实 tokenizer.json）：整串 `input_ids` = `[2, 255999, 258880×N, 258882, 1]`，
+ * 长度 N+4（多出来的 2 和 1 是 `post_processor` 自动加的 `<bos>` / `<eos>`）。
+ */
+export const MULTIMODAL_TOKENS = Object.freeze({
+  boi: '<|image>',
+  image: '<|image|>',
+  eoi: '<image|>',
+  video: '<|video|>',
+})
+
+/**
  * 任务前缀（仅文本使用；图/视频/音频**不加前缀**）。
  *
  * 卡片原文：「For text tasks, omitting the recommended task prefix may lead to sub-optimal

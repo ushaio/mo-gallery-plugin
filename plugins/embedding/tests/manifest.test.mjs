@@ -116,9 +116,13 @@ test('health 只查体积（不算哈希），缺模型时如实报告', async (
   assert.ok(reply.result.models.every((model) => model.present === false))
 })
 
-test('text 这条路径的参数校验先于分词器缺口', async () => {
+test('text：参数校验先于模型缺失（BAD_REQUEST 早于 MODEL_MISSING）', async () => {
   const collected = collector()
-  const plugin = createEmbeddingPlugin({ write: collected.write })
+  // 模型目录故意指向不存在的位置：参数错必须仍然先报 BAD_REQUEST，而不是被 MODEL_MISSING 顶掉。
+  const plugin = createEmbeddingPlugin({
+    write: collected.write,
+    modelsDirectory: join(PACKAGE_ROOT, 'definitely-not-here'),
+  })
   const [badPrompt] = await ask(plugin, collected, {
     jsonrpc: '2.0',
     id: 4,
@@ -126,6 +130,14 @@ test('text 这条路径的参数校验先于分词器缺口', async () => {
     params: { prompt: 'nope', text: '海边日落' },
   })
   assert.equal(badPrompt.error.code, ERROR_CODES.BAD_REQUEST)
+
+  const [badText] = await ask(plugin, collected, {
+    jsonrpc: '2.0',
+    id: 40,
+    method: 'embedding.text',
+    params: { prompt: 'searchQuery', text: '' },
+  })
+  assert.equal(badText.error.code, ERROR_CODES.BAD_REQUEST)
 
   const [badDim] = await ask(plugin, collected, {
     jsonrpc: '2.0',
@@ -135,14 +147,16 @@ test('text 这条路径的参数校验先于分词器缺口', async () => {
   })
   assert.equal(badDim.error.code, ERROR_CODES.BAD_REQUEST)
 
-  // 参数合法但分词器未接入：必须**如实报 UNSUPPORTED**，而不是用猜出来的 token 蒙一个向量。
-  const [notImplemented] = await ask(plugin, collected, {
+  // 参数合法、分词器已接入，但模型文件不在场：如实报 MODEL_MISSING（用户能自己补），
+  // 不再是「能力缺失」的 UNSUPPORTED。
+  const [missing] = await ask(plugin, collected, {
     jsonrpc: '2.0',
     id: 6,
     method: 'embedding.text',
     params: { prompt: 'searchQuery', text: '海边日落' },
   })
-  assert.equal(notImplemented.error.code, ERROR_CODES.UNSUPPORTED)
+  assert.equal(missing.error.code, ERROR_CODES.MODEL_MISSING)
+  assert.match(missing.error.message, /tokenizer\.json/)
 })
 
 test('image：声明与字节不符时立刻回错误，不让宿主白传几 MB', async () => {
@@ -172,7 +186,10 @@ test('image：网格低于模型下限时被挡住（下限是模型约束，不
 
 test('image：控制帧声明后不回任何东西，攒够字节才应答', async () => {
   const collected = collector()
-  const plugin = createEmbeddingPlugin({ write: collected.write })
+  const plugin = createEmbeddingPlugin({
+    write: collected.write,
+    modelsDirectory: join(PACKAGE_ROOT, 'definitely-not-here'),
+  })
   plugin.push(encodeControlFrameAsFrame({
     jsonrpc: '2.0',
     id: 10,
@@ -187,8 +204,9 @@ test('image：控制帧声明后不回任何东西，攒够字节才应答', asy
   await plugin.drain()
   const [reply] = collected.envelopes()
   assert.equal(reply.id, 10)
-  // 向量本身要等分词器（§4.4），但协议链路必须已经通了。
-  assert.equal(reply.error.code, ERROR_CODES.UNSUPPORTED)
+  // 协议链路必须已通到「真的开始跑视觉编码器」这一步：模型不在场时报 MODEL_MISSING
+  // （而不是 UNSUPPORTED 那种「本版本没有这个能力」）。
+  assert.equal(reply.error.code, ERROR_CODES.MODEL_MISSING)
 })
 
 test('image：数据帧乱序属于流不同步，直接抛出而不是猜', () => {
