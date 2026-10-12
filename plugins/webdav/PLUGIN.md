@@ -1,4 +1,4 @@
-# WebDAV Desktop plugin (飞牛云 / 通用)
+# WebDAV Desktop plugin
 
 This is an external third-party Node storage plugin. The same `dist/main.js` runs
 on Windows x64, macOS x64/arm64, and Linux x64/arm64 when Desktop supplies its

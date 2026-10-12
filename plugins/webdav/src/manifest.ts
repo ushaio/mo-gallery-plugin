@@ -7,7 +7,7 @@ export const manifest: PluginManifest = {
   apiVersion: '1',
   type: 'node',
   runtime: 'node22',
-  name: 'WebDAV (飞牛云 / 通用)',
+  name: 'WebDAV',
   description: 'Upload photos to any WebDAV server: fnOS (飞牛云), Nextcloud, 坚果云, Synology, Alist and more.',
   entry: 'dist/main.js',
   platforms: ['windows-amd64', 'darwin-amd64', 'darwin-arm64', 'linux-amd64', 'linux-arm64'],
