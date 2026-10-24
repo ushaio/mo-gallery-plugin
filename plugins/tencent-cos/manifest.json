@@ -1,0 +1,81 @@
+{
+  "id": "tencent-cos",
+  "version": "0.1.0-beta.1",
+  "coreApiVersion": "1",
+  "apiVersion": "1",
+  "type": "node",
+  "runtime": "node22",
+  "name": "Tencent Cloud COS",
+  "description": "Upload photos to Tencent Cloud Object Storage (COS).",
+  "entry": "dist/main.js",
+  "platforms": [
+    "windows-amd64",
+    "darwin-amd64",
+    "darwin-arm64",
+    "linux-amd64",
+    "linux-arm64"
+  ],
+  "capabilities": [
+    "plugin.health",
+    "source.validate",
+    "object.put",
+    "object.get",
+    "object.stat",
+    "object.list",
+    "object.move",
+    "object.delete",
+    "object.getUrl",
+    "checksum",
+    "idempotency"
+  ],
+  "contributions": [
+    {
+      "domain": "storage",
+      "apiVersion": "1",
+      "capabilities": [
+        "plugin.health",
+        "source.validate",
+        "object.put",
+        "object.get",
+        "object.stat",
+        "object.list",
+        "object.move",
+        "object.delete",
+        "object.getUrl",
+        "checksum",
+        "idempotency"
+      ]
+    },
+    {
+      "domain": "ui",
+      "apiVersion": "1",
+      "capabilities": ["ui.config"]
+    }
+  ],
+  "permissions": ["network:configured-endpoint"],
+  "configSchema": {
+    "type": "object",
+    "properties": {
+      "region": { "type": "string", "title": "Region", "x-i18n": { "zh": { "title": "地域", "description": "存储桶所在地域，例如 ap-shanghai、ap-beijing、ap-guangzhou。" }, "en": { "title": "Region", "description": "The bucket region, for example ap-shanghai, ap-beijing, or ap-guangzhou." } } },
+      "bucket": { "type": "string", "title": "Bucket", "x-i18n": { "zh": { "title": "存储桶", "description": "完整存储桶名称，必须带 APPID 后缀，例如 my-photos-1250000000。" }, "en": { "title": "Bucket", "description": "The full bucket name including the APPID suffix, for example my-photos-1250000000." } } },
+      "endpoint": { "type": "string", "title": "Endpoint", "x-i18n": { "zh": { "title": "服务端点", "description": "可选。留空使用默认域名 <bucket>.cos.<region>.myqcloud.com；使用私有化或专属域名时填写。" }, "en": { "title": "Endpoint", "description": "Optional. Leave empty for the default <bucket>.cos.<region>.myqcloud.com host; set it for private or dedicated domains." } } },
+      "basePath": { "type": "string", "title": "Base path", "x-i18n": { "zh": { "title": "基础路径", "description": "可选。所有照片对象都会写入此前缀目录。" }, "en": { "title": "Base path", "description": "Optional prefix for all uploaded photo objects." } } },
+      "publicUrl": { "type": "string", "title": "Public URL prefix", "x-i18n": { "zh": { "title": "公开访问地址", "description": "可选。填写 CDN 加速域名或公开读的存储桶域名；留空则使用端点地址。" }, "en": { "title": "Public URL prefix", "description": "Optional CDN or public-read bucket domain. Leave empty to use the endpoint." } } },
+      "urlMode": { "type": "string", "title": "URL mode (public/signed)", "x-i18n": { "zh": { "title": "访问地址模式（public/signed）", "description": "存储桶公开读时使用 public；私有读使用 signed。" }, "en": { "title": "URL mode (public/signed)", "description": "Use public for public-read buckets; use signed for private buckets." } } },
+      "signedUrlExpiresSeconds": { "type": "string", "title": "Signed URL lifetime (seconds)", "x-i18n": { "zh": { "title": "签名地址有效期（秒）", "description": "仅 signed 模式生效，范围 60–86400，默认 900。" }, "en": { "title": "Signed URL lifetime (seconds)", "description": "Only for signed mode. Allowed range is 60–86400; default is 900." } } }
+    },
+    "required": ["region", "bucket"]
+  },
+  "credentialSchema": {
+    "type": "object",
+    "properties": {
+      "secretId": { "type": "string", "title": "SecretId", "format": "password", "x-i18n": { "zh": { "title": "SecretId" }, "en": { "title": "SecretId" } } },
+      "secretKey": { "type": "string", "title": "SecretKey", "format": "password", "x-i18n": { "zh": { "title": "SecretKey" }, "en": { "title": "SecretKey" } } },
+      "sessionToken": { "type": "string", "title": "Session token", "format": "password", "x-i18n": { "zh": { "title": "临时密钥 Token" }, "en": { "title": "Session token" } } }
+    },
+    "required": ["secretId", "secretKey"]
+  },
+  "ui": {
+    "entry": "ui/index.html"
+  }
+}

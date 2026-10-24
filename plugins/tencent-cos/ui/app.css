@@ -1,0 +1,237 @@
+/*
+ * S3-compatible / R2 的配置界面样式。
+ *
+ * 这份样式跑在宿主提供的沙箱 iframe 里，是一个独立文档：读不到宿主的样式表，
+ * 所以配色不自己另起一套，而是消费宿主 init 下发的设计令牌（`payload.tokens`，
+ * 见 src/ui.ts 的 applyTokens）：界面把令牌写到本文件的 `:root` 上，于是这里可以
+ * 直接用 `var(--foreground)` / `var(--border)` 这些**与 desktop 同名**的变量，
+ * 字体、配色、圆角自然跟着桌面端走。
+ *
+ * 下面的值只是「宿主没有下发令牌」时的兜底（等于 desktop 的浅色 / 深色主题）。
+ * 背景保持透明，让窗口底色透出来。
+ */
+
+:root {
+  color-scheme: light;
+  --foreground: #0f0f0f;
+  --muted-foreground: #666666;
+  --border: #e5e5e5;
+  --background: #ffffff;
+  --secondary: #f4f4f4;
+  --primary: #111111;
+  --primary-foreground: #ffffff;
+  --ring: #111111;
+  --destructive: #cc0000;
+  --radius: 0.5rem;
+  /* 状态绿：宿主没有对应令牌，两个主题共用同一个值（与 shared.tsx 的状态绿一致）。 */
+  --mo-ok: #4f9d69;
+}
+
+html[data-theme='dark'] {
+  color-scheme: dark;
+  --foreground: #e0e0e0;
+  --muted-foreground: #888888;
+  --border: #222222;
+  --background: #050505;
+  --secondary: #1a1a1a;
+  --primary: #d4af37;
+  --primary-foreground: #000000;
+  --ring: #d4af37;
+  --destructive: #cf6679;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: transparent;
+}
+
+/* 宿主给 iframe 外套的是 p-6，滚动条落在 iframe 内部；常驻槽位避免它出现／消失
+   时整张表单横向跳动（尤其两列布局）。 */
+html {
+  scrollbar-gutter: stable;
+}
+
+body {
+  /* 令牌里是桌面端的字体族（Montserrat 那一串）；拿不到时退回系统栈。 */
+  font-family: var(--font-sans, system-ui, -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--foreground);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 宿主已经给了 24px 外边距，这里只补一点点，避免输入框贴住滚动条。 */
+.mo-root {
+  padding: 2px 2px 10px;
+}
+
+.mo-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.mo-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mo-section-title {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+/*
+ * 字段网格：默认单列，宽度够时两列 —— 与宿主自己的存储源表单同一个断点
+ * （Tailwind 的 sm:640px）。断点落在 iframe 自己的视口宽度上。
+ */
+.mo-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px 16px;
+}
+
+@media (min-width: 640px) {
+  .mo-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.mo-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+/** 长 URL 这类字段横跨整行，不被两列挤成半宽。 */
+.mo-wide {
+  grid-column: 1 / -1;
+}
+
+/* 字段标题用宿主表单同一个规范（desktop 的 pages/settings/shared.tsx 里的 Field）。 */
+.mo-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+.mo-input {
+  width: 100%;
+  height: 32px;
+  padding: 0 10px;
+  font: inherit;
+  font-size: 12px;
+  color: var(--foreground);
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) - 2px);
+  outline: none;
+}
+
+select.mo-input {
+  padding: 0 8px;
+  cursor: pointer;
+}
+
+/* 显式指定占位符颜色：默认值在深色下和真实取值几乎一样亮，分不清哪个是已填的。 */
+.mo-input::placeholder {
+  color: var(--muted-foreground);
+  opacity: 1;
+}
+
+/* 焦点样式对齐桌面端表单控件：1px 的 --ring 描边。 */
+.mo-input:focus-visible {
+  border-color: var(--ring);
+  box-shadow: 0 0 0 1px var(--ring);
+}
+
+.mo-hint {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--muted-foreground);
+}
+
+.mo-hidden {
+  display: none;
+}
+
+.mo-status {
+  margin: 0;
+  min-height: 18px;
+  font-size: 12px;
+  color: var(--muted-foreground);
+}
+
+.mo-status[data-state='ok'] {
+  color: var(--mo-ok);
+}
+
+.mo-status[data-state='error'] {
+  color: var(--destructive);
+}
+
+.mo-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+/* 与 .mo-input 等高，动作行和字段列对齐。 */
+.mo-btn {
+  height: 32px;
+  padding: 0 12px;
+  font: inherit;
+  font-size: 12px;
+  color: var(--foreground);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) - 2px);
+  cursor: pointer;
+}
+
+/* 悬停用 --secondary，和桌面端的次要按钮同一个反馈。 */
+.mo-btn:hover:not(:disabled) {
+  background: var(--secondary);
+}
+
+.mo-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.mo-btn-primary {
+  color: var(--primary-foreground);
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+/* 主按钮的悬停反馈与桌面端的 desktop-settings-primary 一致。 */
+.mo-btn-primary:hover:not(:disabled) {
+  background: var(--primary);
+  opacity: 0.9;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .mo-btn,
+  .mo-input {
+    transition: border-color 120ms ease, box-shadow 120ms ease, background-color 120ms ease;
+  }
+}

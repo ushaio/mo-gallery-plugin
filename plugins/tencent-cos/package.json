@@ -1,0 +1,26 @@
+{
+  "name": "@mo-gallery/desktop-plugin-tencent-cos",
+  "version": "0.1.0-beta.1",
+  "private": true,
+  "description": "Tencent Cloud Object Storage (COS) Desktop storage plugin.",
+  "type": "module",
+  "main": "./dist/main.js",
+  "types": "./dist/main.d.ts",
+  "scripts": {
+    "build": "pnpm run build:main && pnpm run build:ui",
+    "build:main": "tsc --noEmit false --outDir dist --declaration --declarationMap --sourceMap -p tsconfig.json && esbuild src/main.ts --bundle --platform=node --format=esm --target=node22 --banner:js=\"import { createRequire } from 'module'; const require = createRequire(import.meta.url);\" --outfile=dist/main.js",
+    "build:ui": "esbuild src/ui.ts --bundle --platform=browser --format=iife --target=es2020 --outfile=ui/app.js",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "tsc --noEmit -p tsconfig.test.json && node --import tsx tests/contract.test.ts"
+  },
+  "dependencies": {
+    "@mo-gallery/plugin-sdk": "file:../../../emulsion-desktop-v3/packages/plugin-sdk",
+    "cos-nodejs-sdk-v5": "3.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "20.19.30",
+    "esbuild": "0.27.2",
+    "tsx": "4.21.0",
+    "typescript": "5.9.3"
+  }
+}
