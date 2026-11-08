@@ -15,7 +15,7 @@ pnpm build
 
 SDK 来自 `file:../../../emulsion-desktop-v3/packages/plugin-sdk`。构建将 SDK 的 JSON-RPC transport 一起打包到 `dist/main.mjs`，正式运行无需 TypeScript loader 或工作区依赖。测试直接使用 Node 内置 runner，无第三方测试依赖。
 
-本插件需要宿主实现 `image-preview@1` 及输入 transfer 读服务。开发联调：先运行 `pnpm build`，再在 Desktop 插件管理的开发目录设置中选择本目录（仅开发模式），沿用现有开发目录加载流程，不修改用户配置文件或关闭校验。加载插件或正式安装后，在资源库执行“修复缩略图”，重新处理此前缺少预览的 3FR。
+本插件需要宿主实现 `image-preview@1` 及输入 transfer 读服务。开发联调：先运行 `pnpm build`，再在 Desktop 插件管理的开发目录设置中选择本目录（仅开发模式），沿用现有开发目录加载流程，不修改用户配置文件或关闭校验。加载插件或正式安装后，宿主会自动发现本插件声明的 `.3fr` 并把资源库里该后缀的资产重新排队、生成缩略图（也可手动执行“修复缩略图”重试此前缺少预览的 3FR）。
 
 正式安装/发布必须按仓库 [CONTRIBUTING.md](../../CONTRIBUTING.md) 使用 `emulsion-desktop-v3/build/package-desktop-plugin.mjs` 生成包含 manifest、入口、checksums 和受信任 Ed25519 签名的 ZIP；开发目录流程不替代正式包签名、安装校验或权限检查。`permissions: []` 是能力声明，**不代表 OS 沙箱**。
 
