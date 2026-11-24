@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@mo-gallery/plugin-sdk':
-        specifier: file:../../../emulsion-desktop-v3/packages/plugin-sdk
-        version: file:../../../emulsion-desktop-v3/packages/plugin-sdk
+        specifier: file:../../../emulsion/packages/plugin-sdk
+        version: file:../../../emulsion/packages/plugin-sdk
     devDependencies:
       esbuild:
         specifier: 0.27.2
@@ -174,8 +174,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@mo-gallery/plugin-sdk@file:../../../emulsion-desktop-v3/packages/plugin-sdk':
-    resolution: {directory: ../../../emulsion-desktop-v3/packages/plugin-sdk, type: directory}
+  '@mo-gallery/plugin-sdk@file:../../../emulsion/packages/plugin-sdk':
+    resolution: {directory: ../../../emulsion/packages/plugin-sdk, type: directory}
     engines: {node: '>=20'}
 
   esbuild@0.27.2:
@@ -263,7 +263,7 @@ snapshots:
   '@esbuild/win32-x64@0.27.2':
     optional: true
 
-  '@mo-gallery/plugin-sdk@file:../../../emulsion-desktop-v3/packages/plugin-sdk': {}
+  '@mo-gallery/plugin-sdk@file:../../../emulsion/packages/plugin-sdk': {}
 
   esbuild@0.27.2:
     optionalDependencies:

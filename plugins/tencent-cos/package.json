@@ -14,7 +14,7 @@
     "test": "tsc --noEmit -p tsconfig.test.json && node --import tsx tests/contract.test.ts"
   },
   "dependencies": {
-    "@mo-gallery/plugin-sdk": "file:../../../emulsion-desktop-v3/packages/plugin-sdk",
+    "@mo-gallery/plugin-sdk": "file:../../../emulsion/packages/plugin-sdk",
     "cos-nodejs-sdk-v5": "3.0.0"
   },
   "devDependencies": {

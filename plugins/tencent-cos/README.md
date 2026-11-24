@@ -17,7 +17,7 @@ plugin process, and `ui/app.js` for the browser bundle loaded by `ui/index.html`
 generated and git-ignored.
 
 The plugin SDK is referenced locally as
-`file:../../../emulsion-desktop-v3/packages/plugin-sdk`, so this package requires
+`file:../../../emulsion/packages/plugin-sdk`, so this package requires
 the mo-gallery multi-repository workspace layout.
 
 See `CONTRIBUTING.md` at the repository root for the release flow (signed ZIP,

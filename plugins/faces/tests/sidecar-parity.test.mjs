@@ -2,7 +2,7 @@
  * 与旧内置 sidecar 的等价性对照。
  *
  * 这是「移植没有改算法」的直接证据：同一批合成像素同时喂给
- * ① `emulsion-desktop-v3/runtime/inference`（旧 sidecar，NDJSON + base64）与
+ * ① `emulsion/backend-src/runtime/inference`（旧 sidecar，NDJSON + base64）与
  * ② 本插件（二进制帧），逐字段比对检测框与 128 维特征。
  *
  * 为什么用合成像素而不是真实照片：真实照片属于用户，不该被测试读取；而等价性只要求

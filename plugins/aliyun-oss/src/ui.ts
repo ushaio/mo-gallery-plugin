@@ -6,7 +6,7 @@ import { createPluginUiClient, type PluginUiInitPayload } from '@mo-gallery/plug
  * 这个文件由宿主在沙箱 iframe 中加载，**不是**插件进程的一部分：
  * 它没有 Node API、没有凭据、也不能联网（宿主下发的 CSP 是 connect-src 'none'）。
  * 所有动作都通过 `createPluginUiClient()` 回到宿主，详见
- * `@mo-gallery/plugin-sdk/ui` 与 emulsion-desktop-v3 的 storage_plugins/README.md。
+ * `@mo-gallery/plugin-sdk/ui` 与 emulsion/backend-src 的 storage_plugins/README.md。
  *
  * 默认值必须与进程侧 `src/plugin.ts` 的 `readConfig()` 保持一致，否则界面显示的
  * 和实际写入对象存储的会不一致。

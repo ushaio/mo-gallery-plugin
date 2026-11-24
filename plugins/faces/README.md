@@ -3,7 +3,7 @@
 MO Gallery 资源库的人脸插件：**YuNet 检测 + SFace 特征**，全部在本机跑，不出网、不上传。
 
 插件只做算法。人物分组、人工改名/合并、墓碑、素材关联与全部界面都留在宿主
-（`emulsion-desktop-v3`），所以卸载插件不会丢任何「谁是谁」的数据。
+（`emulsion/backend-src`），所以卸载插件不会丢任何「谁是谁」的数据。
 
 ## 它怎么和宿主配合
 
@@ -89,7 +89,7 @@ npm run test:e2e    # 真子进程 + 真权限参数 + 真模型
 端到端测试默认读取：
 
 - 模型目录：`MO_GALLERY_FACE_MODELS`，否则 `%APPDATA%\mo-gallery-desktop\models\face`
-- 原生运行时：`MO_GALLERY_FACE_RUNTIME`，否则工作区里的 `emulsion-desktop-v3/runtime/inference`
+- 原生运行时：`MO_GALLERY_FACE_RUNTIME`，否则工作区里的 `emulsion/backend-src/runtime/inference`
 
 两者或缺其一，端到端用例自动跳过（单元与几何用例仍会跑）。
 

@@ -13,7 +13,7 @@ MO Gallery Desktop 的通用 WebDAV 存储源插件。任何标准 WebDAV 服务
 ## 构建
 
 本插件位于 `mo-gallery-plugin` 市场仓库的 `plugins/webdav`（官方插件目录，SDK 以
-`file:../../../emulsion-desktop/packages/plugin-sdk` 相对引用，需要
+`file:../../../emulsion/packages/plugin-sdk` 相对引用，需要
 mo-gallery 多仓库工作区布局）：
 
 ```bash

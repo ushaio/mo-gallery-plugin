@@ -20,7 +20,7 @@ pnpm test
 
 The generated package must pass the Desktop host's manifest, checksum, and
 signature checks before it can be used in a production build. The local SDK
-reference points at `../../../emulsion-desktop-v3/packages/plugin-sdk`
+reference points at `../../../emulsion/packages/plugin-sdk`
 and requires the mo-gallery multi-repository workspace layout.
 
 Release flow: see the repository's [CONTRIBUTING.md](../../CONTRIBUTING.md).

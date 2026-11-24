@@ -1,7 +1,7 @@
 /**
  * faces@1 插件的协议入口。
  *
- * 宿主（`emulsion-desktop-v3/storage_plugins/faces.go`）启动这个进程后：
+ * 宿主（`emulsion/backend-src/storage_plugins/faces.go`）启动这个进程后：
  *
  *   1. 发 `plugin.getManifest`，核对 id / version / `faces@1` 贡献，否则握手失败；
  *   2. 发 `faces.getModelSpecs`，把插件声明的模型（文件、体积、sha256、许可）当作唯一真相，

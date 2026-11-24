@@ -27,7 +27,7 @@ export function defaultModelsDir() {
 export function defaultRuntimeDir() {
   const fromEnv = (process.env.MO_GALLERY_FACE_RUNTIME ?? '').trim()
   if (fromEnv !== '') return fromEnv
-  return join(WORKSPACE_ROOT, 'emulsion-desktop-v3', 'runtime', 'inference')
+  return join(WORKSPACE_ROOT, 'emulsion', 'backend-src', 'runtime', 'inference')
 }
 
 export function modelsAvailable(modelsDir = defaultModelsDir()) {

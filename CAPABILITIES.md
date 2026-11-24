@@ -9,7 +9,7 @@
 
 > **落地进度**：本文档与市场侧校验（`schema/index.schema.json` + `npm run check`）已经生效；
 > 宿主侧的「登记表白名单 + 按声明拼启动参数」随 `faces@1` 一起落地，实现位置与现状见
-> `emulsion-desktop-v3/docs/plugin-capabilities.md`。在宿主侧落地前，写错的能力 id 会被市场
+> `emulsion/backend-src/storage_plugins/`（`catalog.go` / `runtime_resolver.go` / `library.go`）。在宿主侧落地前，写错的能力 id 会被市场
 > 校验挡在入口，但直接安装本地未签名包时不会被拒绝。
 
 ## 能力 id 的写法
@@ -94,7 +94,7 @@
 
 新能力要**两边同时改**，并走一次安全评审：
 
-1. 宿主 `emulsion-desktop-v3`：能力白名单与执行方式（拼启动参数、准备目录、注入环境变量）落在 `storage_plugins/catalog.go`（`validateManifest` / `normalizeManifest`）与 `storage_plugins/runtime_resolver.go`、`storage_plugins/library.go`，见 `docs/plugin-capabilities.md`。
+1. 宿主 `emulsion`（Go 后端在 `backend-src/`）：能力白名单与执行方式（拼启动参数、准备目录、注入环境变量）落在 `backend-src/storage_plugins/catalog.go`（`validateManifest` / `normalizeManifest`）与 `backend-src/storage_plugins/runtime_resolver.go`、`backend-src/storage_plugins/library.go`。
 2. 本仓库：本文档的表格 + 界面文案 + `schema/index.schema.json` + `scripts/validate-index.mjs`。
 
 旧客户端遇到未知能力会直接拒绝安装，所以使用新能力的插件必须在索引的 `description` 里写明所需的 Desktop 版本；`coreApiVersion` 目前固定为 `1`，它表达的是 manifest 结构版本，不是能力集合版本。

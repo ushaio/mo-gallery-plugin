@@ -22,7 +22,7 @@ only requires it lazily when `URLLIB_ENABLE_PROXY` or `enableProxy` is set; OSS
 never sets either, so the reference is never evaluated at runtime.
 
 The plugin SDK is referenced locally as
-`file:../../../emulsion-desktop-v3/packages/plugin-sdk`, so this package requires
+`file:../../../emulsion/packages/plugin-sdk`, so this package requires
 the mo-gallery multi-repository workspace layout.
 
 See `CONTRIBUTING.md` at the repository root for the release flow (signed ZIP,
